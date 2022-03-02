@@ -1,4 +1,4 @@
-Get-ChildItem -Path C:\Projects\My_Automation\ -File -Filter "*.ps1" -Recurse | Import-Module
+Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1" -Recurse | Import-Module
 function callingPrvLabConnection {
     $time = 100
     $millisecond = $time   
@@ -10,14 +10,14 @@ function callingPrvLabConnection {
     Write-Progress -id 0 -PercentComplete 100 -Completed -Activity "Calling Script..."
     Connect_to_PrvLab
 }
-ImportJsonToLocalVariables "C:\projects\my_automation\my_vms.json" | out-null
+ImportJsonToLocalVariables "$PSScriptRoot\My_VMs.json" | out-null
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function', Target='*')]
 $MyBoxes = @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206, 
                 $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 
-$Cluster = $MyBoxes | Where-Object -Property Hostname -Match "vlab02420[0-5]$"
+Set-Variable -Name "Cluster" -Value ($MyBoxes | Where-Object -Property Hostname -Match "vlab02420[0-3,5]$")
 function Get-Full-History {
     code (Get-PSReadlineOption).HistorySavePath
 }
@@ -39,7 +39,7 @@ function Get-Timestamp {
     return ($Date[0], ($Date[1].Split(":")[0..1] -join ".")) -join "_"
 }
 $env:OPENSSL_CONF = "C:\Openssl\openssl.cnf"
-$RedHatRegistrationCmdlet = "subscription-manager register --username jonathan.zollinger@microfocus.com --password 'imSOhungryIcouldD!*' --auto-attach"
+Set-Variable -Name RedHatRegistrationCmdlet -Value "subscription-manager register --username jonathan.zollinger@microfocus.com --password 'imSOhungryIcouldD!*' --auto-attach"
 
 function Show-Progress {
     <#

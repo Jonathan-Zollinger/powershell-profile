@@ -11,7 +11,11 @@ function callingPrvLabConnection {
     Connect_to_PrvLab
 }
 ImportJsonToLocalVariables "$PSScriptRoot\My_VMs.json" | out-null
-
+def UpdatePowershell{
+    Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
+    .\Update_Powershell.ps1
+    Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
+}
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function', Target='*')]
 $MyBoxes = @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206, 

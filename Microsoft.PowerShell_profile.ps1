@@ -1,4 +1,7 @@
-Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1" -Recurse | Import-Module
+$MarionetteFiles = Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1" -Recurse
+foreach($file in $MarionetteFiles){
+    Import-Module ("C:\Projects\MarionetteToolbox\{0}" -f $file)
+}
 function callingPrvLabConnection {
     $time = 100
     $millisecond = $time   

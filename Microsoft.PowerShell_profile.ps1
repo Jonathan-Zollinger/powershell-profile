@@ -3,11 +3,15 @@ $MarionetteToolboxDirectory = (Get-ChildItem -Path C:\Projects\MarionetteToolbox
 
 $ComputronDirectory = (Get-ChildItem -Path C:\Projects\Computron -File -Filter "*.ps1")
 foreach ($File in $ComputronDirectory) {
-    Import-Module ("C:\Projects\Computron\{0}" -f $File)
+    $PSVersionLiason = $File.Name.Split("\")
+    $File = $PSVersionLiason[$PSVersionLiason.Count-1]
+    Import-Module (("C:\Projects\Computron\{0}" -f ($File)))
 }
 
 foreach ($File in $MarionetteToolboxDirectory) {
-    Import-Module ("C:\Projects\MarionetteToolbox\{0}" -f $File)
+    $PSVersionLiason = $File.Name.Split("\")
+    $File = $PSVersionLiason[$PSVersionLiason.Count-1]
+    Import-Module (("C:\Projects\MarionetteToolbox\{0}" -f $File))
 }
 
 ImportJsonToLocalVariables "$PSScriptRoot\My_VMs.json" | out-null

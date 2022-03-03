@@ -1,39 +1,36 @@
-$MarionetteFiles = Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1" -Recurse
-foreach($file in $MarionetteFiles){
-    Import-Module ("C:\Projects\MarionetteToolbox\{0}" -f $file)
+
+$MarionetteToolboxDirectory = (Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1")
+
+$ComputronDirectory = (Get-ChildItem -Path C:\Projects\Computron -File -Filter "*.ps1")
+foreach ($File in $ComputronDirectory) {
+    Import-Module ("C:\Projects\Computron\{0}" -f $File)
 }
-function callingPrvLabConnection {
-    $time = 100
-    $millisecond = $time   
-    while ($millisecond -gt 0) {
-        Write-Progress -id 0 -Status "Connecting to prv lab in $(($millisecond - ($millisecond % 100))/100 + 1) (hit ctrl+c to stop)..." -Activity "Permitting user to stop connection to PrvLab" -PercentComplete (($time - $millisecond) / $time * 100)
-        Start-Sleep -Milliseconds 1 
-        $millisecond = $millisecond - 1
-    }
-    Write-Progress -id 0 -PercentComplete 100 -Completed -Activity "Calling Script..."
-    Connect_to_PrvLab
+
+foreach ($File in $MarionetteToolboxDirectory) {
+    Import-Module ("C:\Projects\MarionetteToolbox\{0}" -f $File)
 }
+
 ImportJsonToLocalVariables "$PSScriptRoot\My_VMs.json" | out-null
-function UpdatePowershell{
+function UpdatePowershell {
     Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
     .\Update_Powershell.ps1
     Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
 }
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-    'PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function', Target='*')]
+    'PSUseDeclaredVarsMoreThanAssignments', '', Scope = 'Function', Target = '*')]
 $MyBoxes = @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206, 
-                $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
+    $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 
 Set-Variable -Name "Cluster" -Value ($MyBoxes | Where-Object -Property Hostname -Match "vlab02420[0-3,5]$")
 function Get-Full-History {
     code (Get-PSReadlineOption).HistorySavePath
 }
 
-function Build_IG_Dev {
-    Set-Location "C:\Projects\IG Development\idgov\"
+function BuildIgDev {
+    Set-Location "C:\Projects\develop\idgov\"
     ./run_all.ps1
 }
-function Get-Timestamp {
+function GetTimestamp {
     <#
     .DESCRIPTION
     returns a date string formatted with the intent to be used in a filename, ie BuildAllClean_2022-02-18_20.16.log is a log file for BuildAllClean. the timestamp shows it happened at 8:16 in the evening on Feb 18 2022
@@ -88,28 +85,27 @@ function Show-Progress {
     
     # TODO: make the progress bar some ascii art that changes - like a paddle ball whose string will display new text with each "hit"
 
-     Param(
-     [Parameter()][string]$Activity="Current Task",
-     [Parameter()][ValidateScript({$_ -gt 0})][long]$PercentComplete=1,
-     [Parameter()][ValidateScript({$_ -gt 0})][long]$Total=100,
-     [Parameter()][ValidateRange(1,60)][int]$RefreshInterval=1
-     )
+    Param(
+        [Parameter()][string]$Activity = "Current Task",
+        [Parameter()][ValidateScript({ $_ -gt 0 })][long]$PercentComplete = 1,
+        [Parameter()][ValidateScript({ $_ -gt 0 })][long]$Total = 100,
+        [Parameter()][ValidateRange(1, 60)][int]$RefreshInterval = 1
+    )
     
-    Process {    
-    
+    Process {        
         #Continue displaying progress on the same line/position
         $CurrentLine = $host.UI.RawUI.CursorPosition
     
         #Width of the progress bar
         if ($host.UI.RawUI.WindowSize.Width -gt 70) { $Width = 50 }
-        else { $Width = ($host.UI.RawUI.WindowSize.Width) -20 }
-        if ($Width -lt 20) {"Window size is too small to display the progress bar";break}
+        else { $Width = ($host.UI.RawUI.WindowSize.Width) - 20 }
+        if ($Width -lt 20) { "Window size is too small to display the progress bar"; break }
     
         $Percentage = ($PercentComplete / $Total) * 100
     
         #Write-Host -ForegroundColor Magenta "Percentage: $Percentage"
     
-        for ($i=0; $i -le 100; $i += $Percentage) {
+        for ($i = 0; $i -le 100; $i += $Percentage) {
             
             $Percentage = ($PercentComplete / $Total) * 100
             $ProgressBar = 0
@@ -118,15 +114,15 @@ function Show-Progress {
             
             Write-Host -NoNewline -ForegroundColor Cyan "["
     
-            while ($ProgressBar -le $i*$Width/100) {
+            while ($ProgressBar -le $i * $Width / 100) {
                 Write-Host -NoNewline "="
                 $ProgressBar++
-                }
+            }
     
-            while (($ProgressBar -le $Width) -and ($ProgressBar -gt $i*$Width/100)  ) {
+            while (($ProgressBar -le $Width) -and ($ProgressBar -gt $i * $Width / 100)  ) {
                 Write-Host -NoNewline " "
                 $ProgressBar++
-                }        
+            }        
     
             #Write-Host -NoNewline $i
     
@@ -138,7 +134,7 @@ function Show-Progress {
             Start-Sleep -Seconds $RefreshInterval
             #Write-Host ""
     
-            } #for
+        } #for
     
     
         #
@@ -148,11 +144,11 @@ function Show-Progress {
         while ($end -le ($Width)) {
             Write-Host -NoNewline -ForegroundColor Green "="
             $end += 1
-            }
+        }
     
         Write-Host -NoNewline -ForegroundColor Cyan "] "
         Write-Host -NoNewline "$Activity complete                    "
         #>
-        } #Process
+    } #Process
     
-    } #function
+} #function

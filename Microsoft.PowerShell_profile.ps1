@@ -1,25 +1,28 @@
-
-$MarionetteToolboxDirectory = (Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1")
-
 $ComputronDirectory = (Get-ChildItem -Path C:\Projects\Computron -File -Filter "*.ps1")
 foreach ($File in $ComputronDirectory) {
     $PSVersionLiason = $File.Name.Split("\")
     $File = $PSVersionLiason[$PSVersionLiason.Count-1]
-    Import-Module (("C:\Projects\Computron\{0}" -f ($File)))
+    try {
+        Unblock-File (("C:\Projects\Computron\{0}" -f ($File)))
+        import-Module (("C:\Projects\Computron\{0}" -f ($File)))
+    }
+    catch {
+        Write-Warning "The $File requires Admin priveleges and this ps session doesn't provide that. $File is not imported. Continuing with other imports."
+    }
 }
+
+
+$MarionetteToolboxDirectory = (Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1")
 
 foreach ($File in $MarionetteToolboxDirectory) {
     $PSVersionLiason = $File.Name.Split("\")
     $File = $PSVersionLiason[$PSVersionLiason.Count-1]
+    Unblock-File (("C:\Projects\MarionetteToolbox\{0}" -f $File))
     Import-Module (("C:\Projects\MarionetteToolbox\{0}" -f $File))
 }
 
 ImportJsonToLocalVariables "$PSScriptRoot\My_VMs.json" | out-null
-function UpdatePowershell {
-    Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
-    .\Update_Powershell.ps1
-    Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
-}
+
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
     'PSUseDeclaredVarsMoreThanAssignments', '', Scope = 'Function', Target = '*')]
 $MyBoxes = @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206, 
@@ -46,8 +49,15 @@ function GetTimestamp {
     $Date = (Get-date -Format o).Split("T")
     return ($Date[0], ($Date[1].Split(":")[0..1] -join ".")) -join "_"
 }
-$env:OPENSSL_CONF = "C:\Openssl\openssl.cnf"
-Set-Variable -Name RedHatRegistrationCmdlet -Value "subscription-manager register --username jonathan.zollinger@microfocus.com --password 'imSOhungryIcouldD!*' --auto-attach"
+
+Unblock-File $PSScriptRoot\General_Methods.ps1
+import-Module $PSScriptRoot\General_Methods.ps1
+
+function UpdatePowershell {
+    Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
+    .\Update_Powershell.ps1
+    Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
+}
 
 function Show-Progress {
     <#

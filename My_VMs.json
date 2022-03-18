@@ -37,12 +37,6 @@
       "IPv4": "10.204.128.31",
       "Software": ["Main IG Console"]
     },
-    {
-      "Hostname": "vlab024204",
-      "TemplateRegex": "^RHEL83_\\.*",
-      "Notes": [],
-      "IPv4": "DHCP"
-    },
     { 
       "Hostname": "vlab024205",
       "TemplateRegex": "^RHEL83_\\.*",
@@ -84,7 +78,7 @@
       "Hostname": "vlab024210",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
-      "IPv4": "10.204.12130.180",
+      "IPv4": "10.204.130.180",
       "Software": [""]
     },
     {

@@ -79,3 +79,50 @@ function Write-Header{
 function Open-History{
     code (Get-PSReadlineOption).HistorySavePath
 }
+
+function Get-All-Ps1 {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [String] $Directory,
+        [Parameter(Mandatory = $true)]
+        [String] $Imports_File
+    )
+    if(-not(Test-Path -Path $Imports_File)){
+        New-Item -Path $Imports_File | Out-Null
+    }
+    
+    # simple recursion fails to import functions to be usable despite a -global flag. compiling a list of scripts to import is a workaround.
+    foreach($Sub_Directory in (Get-ChildItem -Path $Directory -Directory | Where-Object -Property Name -NotLike ".*")){
+        Get-All-Ps1 $Sub_Directory $Imports_File
+    }
+    $Files = ((Get-ChildItem -Path $Directory -File -Filter "*.ps1"))
+    foreach ($File in $Files) {
+        Add-Content $Imports_File $File.FullName
+    }
+}
+
+function Get-Timestamp {
+    <#
+    .DESCRIPTION
+    returns a date string formatted with the intent to be used in a filename, ie BuildAllClean_2022-02-18_20.16.log is a log file for BuildAllClean. the timestamp shows it happened at 8:16 in the evening on Feb 18 2022
+    
+    .EXAMPLE
+    1
+    PS> .\WarmUpBatmobile.ps1 | Out-File (".\WarmUpBatmobile_{0}.log" -f (Get-Timestamp -Full))
+    .EXAMPLE
+    2
+    PS> "Stayed home to cry and watch Sandra Bullock's 'While You Were Sleeping'" | Out-File (".\CrimeFighting{0}.log" -f (Get-Timestamp))
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $Full
+    )
+    $Date = (Get-date -Format o).Split("T")
+    if ($Full.IsPresent) {
+        return ($Date[0], ($Date[1].Split(":")[0..1] -join ".")) -join "_"
+    }
+    return $Date[0]
+}

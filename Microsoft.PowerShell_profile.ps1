@@ -1,34 +1,41 @@
-$ComputronDirectory = (Get-ChildItem -Path C:\Projects\Computron -File -Filter "*.ps1")
-foreach ($File in $ComputronDirectory) {
-    $PSVersionLiason = $File.Name.Split("\")
-    $File = $PSVersionLiason[$PSVersionLiason.Count-1]
+# ---- Import My Scripts ----
+Unblock-File $PSScriptRoot\General_Methods.ps1
+import-Module $PSScriptRoot\General_Methods.ps1
+# Shared Repos
+$MarionetteToolbox_Directory = "C:\Projects\MarionetteToolbox"
+$Computron_Directory = "C:\Projects\Computron"
+Set-Variable -Scope script -Name 'Directories_To_Import' -Value $PSScriptRoot\Import_me
+New-Item $Directories_To_Import -Force | Out-Null
+$Import_Log = ("{0}\Imports_{1}.log" -f ($PSScriptRoot, (Get-Timestamp)))
+New-Item -Path $Import_Log -ErrorAction SilentlyContinue | Out-Null
+
+foreach ($Directory in $MarionetteToolbox_Directory, $Computron_Directory) {
+    Get-All-Ps1 $Directory $Directories_To_Import
+}
+foreach ($file in (Get-Content $Directories_To_Import)) {
     try {
-        Unblock-File (("C:\Projects\Computron\{0}" -f ($File)))
-        import-Module (("C:\Projects\Computron\{0}" -f ($File)))
+        Unblock-File $file
+        import-Module $file
+        Add-Content -Path $Import_Log -Value ("[Info][{1}] imported {0}." -f ($File, (Get-Timestamp -Full)))
     }
     catch {
-        Write-Warning "The $File requires Admin priveleges and this ps session doesn't provide that. $File is not imported. Continuing with other imports."
+        Add-Content -Path $Import_Log -Value ("[Warning][{1}] Failed to import {0}." -f ($File, (Get-Timestamp -Full)))
     }
 }
+Remove-Item $Directories_To_Import -Force
+Write-Output ("Finished importing modules. Call 'Get-Content `$Import_Log' for more information")
+Set-Clipboard $Import_Log
 
+# ---- Set VM & Other usefule  variables ----
+Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
 
-$MarionetteToolboxDirectory = (Get-ChildItem -Path C:\Projects\MarionetteToolbox -File -Filter "*.ps1")
-
-foreach ($File in $MarionetteToolboxDirectory) {
-    $PSVersionLiason = $File.Name.Split("\")
-    $File = $PSVersionLiason[$PSVersionLiason.Count-1]
-    Unblock-File (("C:\Projects\MarionetteToolbox\{0}" -f $File))
-    Import-Module (("C:\Projects\MarionetteToolbox\{0}" -f $File))
-}
-
-ImportJsonToLocalVariables "$PSScriptRoot\My_VMs.json" | out-null
-
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-    'PSUseDeclaredVarsMoreThanAssignments', '', Scope = 'Function', Target = '*')]
+Import-Json-Inventory "$PSScriptRoot\My_VMs.json" | out-null
+Set-Variable -Name "Cluster" -Value ($MyBoxes | Where-Object -Property Hostname -Match "vlab02420[0-3,5]$")
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope = 'Function', Target = '*')]
 $MyBoxes = @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206, 
     $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 
-Set-Variable -Name "Cluster" -Value ($MyBoxes | Where-Object -Property Hostname -Match "vlab02420[0-3,5]$")
+
 function Get-Full-History {
     code (Get-PSReadlineOption).HistorySavePath
 }
@@ -37,21 +44,7 @@ function BuildIgDev {
     Set-Location "C:\Projects\develop\idgov\"
     ./run_all.ps1
 }
-function GetTimestamp {
-    <#
-    .DESCRIPTION
-    returns a date string formatted with the intent to be used in a filename, ie BuildAllClean_2022-02-18_20.16.log is a log file for BuildAllClean. the timestamp shows it happened at 8:16 in the evening on Feb 18 2022
-    
-    .EXAMPLE
-    1
-    PS> .\WarmUpBatmobile.ps1 | Out-File (".\WarmUpBatmobile_{0}.log" -f (Get-Timestamp))
-    #>
-    $Date = (Get-date -Format o).Split("T")
-    return ($Date[0], ($Date[1].Split(":")[0..1] -join ".")) -join "_"
-}
 
-Unblock-File $PSScriptRoot\General_Methods.ps1
-import-Module $PSScriptRoot\General_Methods.ps1
 
 function UpdatePowershell {
     Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1

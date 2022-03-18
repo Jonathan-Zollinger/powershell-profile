@@ -1,0 +1,119 @@
+The C:\Projects\Computron\produce_local_dev_build.ps1 requires admin priveleges, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+The C:\Projects\Computron\produce_local_dev_build.ps1 requires admin priveleges, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+The C:\Projects\Computron\produce_local_dev_build.ps1 requires admin priveleges, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+The C:\Projects\Computron\produce_local_dev_build.ps1 requires admin priveleges, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+Failed to import C:\Projects\Computron\produce_local_dev_build.ps1 at 2022-03-18_16.10, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+[Warning] Failed to import C:\Projects\Computron\produce_local_dev_build.ps1 at 2022-03-18_16.11, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+[Info] imported C:\Projects\MarionetteToolbox\classes\Zollinger_vSphere_Classes.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\inventory\Import-Json-Inventory.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Copy-File-To-Box.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Register.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Send-Script.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Interface.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Networking.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\software_administration\IgSilentInstall.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Build-Box.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Is-VPN-Active.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Start.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Stop.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Hostname.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Server-Connection.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAdmin.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAuthentication.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vmware_dependencies.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\Computron\local_dev_build_helper_methods.ps1 at 2022-03-18_16.15.
+[Warning] Failed to import C:\Projects\Computron\produce_local_dev_build.ps1 at 2022-03-18_16.15, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+[Info] imported C:\Projects\MarionetteToolbox\classes\Zollinger_vSphere_Classes.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\inventory\Import-Json-Inventory.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Copy-File-To-Box.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Register.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Send-Script.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Interface.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Networking.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\software_administration\IgSilentInstall.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Build-Box.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Is-VPN-Active.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Start.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Stop.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Hostname.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Server-Connection.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAdmin.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAuthentication.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\MarionetteToolbox\vmware_dependencies.ps1 at 2022-03-18_16.15.
+[Info] imported C:\Projects\Computron\local_dev_build_helper_methods.ps1 at 2022-03-18_16.15.
+[Warning] Failed to import C:\Projects\Computron\produce_local_dev_build.ps1 at 2022-03-18_16.15, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+[Info] imported C:\Projects\MarionetteToolbox\classes\Zollinger_vSphere_Classes.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\inventory\Import-Json-Inventory.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Copy-File-To-Box.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Register.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Send-Script.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Interface.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Networking.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\software_administration\IgSilentInstall.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Build-Box.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Is-VPN-Active.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Start.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Stop.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Hostname.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Server-Connection.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAdmin.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAuthentication.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\MarionetteToolbox\vmware_dependencies.ps1 at 2022-03-18_16.17.
+[Info] imported C:\Projects\Computron\local_dev_build_helper_methods.ps1 at 2022-03-18_16.17.
+[Warning] Failed to import C:\Projects\Computron\produce_local_dev_build.ps1 at 2022-03-18_16.17, which this Powershell Session doesn't provide. C:\Projects\Computron\produce_local_dev_build.ps1 is not imported
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\classes\Zollinger_vSphere_Classes.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\inventory\Import-Json-Inventory.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Copy-File-To-Box.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Register.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Send-Script.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Interface.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Networking.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\software_administration\IgSilentInstall.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Build-Box.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Is-VPN-Active.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Start.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Stop.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Hostname.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Server-Connection.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAdmin.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAuthentication.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vmware_dependencies.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\Computron\local_dev_build_helper_methods.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\classes\Zollinger_vSphere_Classes.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\inventory\Import-Json-Inventory.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Copy-File-To-Box.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Register.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Send-Script.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Interface.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Networking.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\software_administration\IgSilentInstall.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Build-Box.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Is-VPN-Active.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Start.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Stop.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Hostname.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Server-Connection.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAdmin.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAuthentication.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\MarionetteToolbox\vmware_dependencies.ps1.
+[Info][2022-03-18_16.23] imported C:\Projects\Computron\local_dev_build_helper_methods.ps1.
+[Warning][2022-03-18_16.23] Failed to import C:\Projects\Computron\produce_local_dev_build.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\classes\Zollinger_vSphere_Classes.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\inventory\Import-Json-Inventory.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\linux_administration\Copy-File-To-Box.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\linux_administration\Register.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\linux_administration\Send-Script.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Interface.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\linux_administration\Update-Networking.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\software_administration\IgSilentInstall.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\Build-Box.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\Is-VPN-Active.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\Start.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\Stop.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Hostname.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\Test-Server-Connection.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAdmin.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vSphere_administration\vSphereAuthentication.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\MarionetteToolbox\vmware_dependencies.ps1.
+[Info][2022-03-18_16.24] imported C:\Projects\Computron\local_dev_build_helper_methods.ps1.
+[Warning][2022-03-18_16.24] Failed to import C:\Projects\Computron\produce_local_dev_build.ps1.

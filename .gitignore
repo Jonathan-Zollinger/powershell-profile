@@ -2,3 +2,4 @@ Help/
 Modules/
 Scripts/
 .vscode/
+*.log

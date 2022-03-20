@@ -4,27 +4,34 @@ import-Module $PSScriptRoot\General_Methods.ps1
 # Shared Repos
 $MarionetteToolbox_Directory = "C:\Projects\MarionetteToolbox"
 $Computron_Directory = "C:\Projects\Computron"
+# Create a temp file to hold all the .ps1 files we want to import.
 Set-Variable -Scope script -Name 'Directories_To_Import' -Value $PSScriptRoot\Import_me
 New-Item $Directories_To_Import -Force | Out-Null
 $Import_Log = ("{0}\Imports_{1}.log" -f ($PSScriptRoot, (Get-Timestamp)))
-New-Item -Path $Import_Log -ErrorAction SilentlyContinue | Out-Null
-
+# Create the log file. If it's already there, dont overwrite it. 
+$Original_Logs = @(0, 0) #pass, fail
+New-Item $Import_Log -ErrorAction SilentlyContinue | Out-Null
+if(!$?){
+    $Original_Logs[0] = ((Get-Content $Import_Log) -match "^\[Info\]").Count
+    $Original_Logs[1] = ((Get-Content $Import_Log) -match "^\[Warning\]").Count
+}
 foreach ($Directory in $MarionetteToolbox_Directory, $Computron_Directory) {
     Get-All-Ps1 $Directory $Directories_To_Import
 }
-foreach ($file in (Get-Content $Directories_To_Import)) {
+foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
     try {
-        Unblock-File $file
-        import-Module $file
-        Add-Content -Path $Import_Log -Value ("[Info][{1}] imported {0}." -f ($File, (Get-Timestamp -Full)))
+        Unblock-File $ps1_File
+        import-Module $ps1_File
+        Add-Content -Path $Import_Log -Value ("[Info][{1}] imported {0}." -f ($ps1_File, (Get-Timestamp -Full)))
     }
     catch {
         Add-Content -Path $Import_Log -Value ("[Warning][{1}] Failed to import {0}." -f ($File, (Get-Timestamp -Full)))
     }
 }
 Remove-Item $Directories_To_Import -Force
-Write-Output ("Finished importing modules. Call 'Get-Content `$Import_Log' for more information")
-Set-Clipboard $Import_Log
+Write-Output ("Finished importing modules. Successfully imported {0} files, Failed to import {1} file(s). for details use the 'Get-Content `$Import_Log' cmdlet." `
+    -f ((((Get-Content $Import_Log) -match "^\[Info\]").Count - $Original_Logs[0]),(((Get-Content $Import_Log) -match "^\[Warning\]").Count - $Original_Logs[1])))
+Set-Clipboard "Get-Content `$Import_Log" 
 
 # ---- Set VM & Other usefule  variables ----
 Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)

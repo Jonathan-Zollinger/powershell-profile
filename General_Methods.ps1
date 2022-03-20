@@ -81,6 +81,23 @@ function Open-History{
 }
 
 function Get-All-Ps1 {
+    <#
+    .DESCRIPTION
+    Recursively accumulates all the .ps1 files in a given directory and all subdirectories. The gathered .ps1 directories are added the provided imports_file. This is a useful resource when you have a respository of Powershell scripts and classes that are actively evolving and hosted with a VCS. By comparison, this ISN't a good resource when you've created a suite of Powershell scripts and classes that rarely change and aren't evolving, but act as a dependable resource for a community. In that case, a Powershell Module would be more suitable to host that resource. \end_rant
+
+    .PARAMETER Directory
+    The Directory provided which may contain .ps1 files and / or subdirectories
+
+    .PARAMETER Imports_File
+    File location where the list of gathered .ps1 files will be stored. 
+
+    .EXAMPLE
+    PS> New-Object -Path .\Temp_File
+    PS> Get-All-Ps1 C:\Projects\Crime_Fighting\ .\Temp_File
+    PS> foreach($File in (Get-Content .\Temp_File)){import-Module $File}
+    PS> Remove-Item -Path .\Temp_File
+    
+    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -88,16 +105,13 @@ function Get-All-Ps1 {
         [Parameter(Mandatory = $true)]
         [String] $Imports_File
     )
-    if(-not(Test-Path -Path $Imports_File)){
-        New-Item -Path $Imports_File | Out-Null
-    }
+    # Create the file. If it's already present, dont overwrite it. Suppress any error warnings. 
+    New-Item -Path $Imports_File -ErrorAction SilentlyContinue | Out-Null
     
-    # simple recursion fails to import functions to be usable despite a -global flag. compiling a list of scripts to import is a workaround.
     foreach($Sub_Directory in (Get-ChildItem -Path $Directory -Directory | Where-Object -Property Name -NotLike ".*")){
         Get-All-Ps1 $Sub_Directory $Imports_File
     }
-    $Files = ((Get-ChildItem -Path $Directory -File -Filter "*.ps1"))
-    foreach ($File in $Files) {
+    foreach ($File in ((Get-ChildItem -Path $Directory -File -Filter "*.ps1"))) {
         Add-Content $Imports_File $File.FullName
     }
 }
@@ -105,11 +119,15 @@ function Get-All-Ps1 {
 function Get-Timestamp {
     <#
     .DESCRIPTION
-    returns a date string formatted with the intent to be used in a filename, ie BuildAllClean_2022-02-18_20.16.log is a log file for BuildAllClean. the timestamp shows it happened at 8:16 in the evening on Feb 18 2022
+    Returns a date string with the month, day and year.
+
+    .PARAMETER Full
+    Optional flag which changes the returned date string to include the hour and minute. The default date provided includes only month, day and year.
     
     .EXAMPLE
     1
     PS> .\WarmUpBatmobile.ps1 | Out-File (".\WarmUpBatmobile_{0}.log" -f (Get-Timestamp -Full))
+
     .EXAMPLE
     2
     PS> "Stayed home to cry and watch Sandra Bullock's 'While You Were Sleeping'" | Out-File (".\CrimeFighting{0}.log" -f (Get-Timestamp))

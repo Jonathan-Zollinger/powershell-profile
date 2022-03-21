@@ -1,13 +1,16 @@
 # ---- Import My Scripts ----
 Unblock-File $PSScriptRoot\General_Methods.ps1
 import-Module $PSScriptRoot\General_Methods.ps1
+
 # Shared Repos
 $MarionetteToolbox_Directory = "C:\Projects\MarionetteToolbox"
 $Computron_Directory = "C:\Projects\Computron"
+
 # Create a temp file to hold all the .ps1 files we want to import.
 Set-Variable -Scope script -Name 'Directories_To_Import' -Value $PSScriptRoot\Import_me
 New-Item $Directories_To_Import -Force | Out-Null
 $Import_Log = ("{0}\Imports_{1}.log" -f ($PSScriptRoot, (Get-Timestamp)))
+
 # Create the log file. If it's already there, dont overwrite it. 
 $Original_Logs = @(0, 0) #pass, fail
 New-Item $Import_Log -ErrorAction SilentlyContinue | Out-Null
@@ -31,7 +34,6 @@ foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
 Remove-Item $Directories_To_Import -Force
 Write-Output ("Finished importing modules. Successfully imported {0} files, Failed to import {1} file(s). for details use the 'Get-Content `$Import_Log' cmdlet." `
     -f ((((Get-Content $Import_Log) -match "^\[Info\]").Count - $Original_Logs[0]),(((Get-Content $Import_Log) -match "^\[Warning\]").Count - $Original_Logs[1])))
-Set-Clipboard "Get-Content `$Import_Log" 
 
 # ---- Set VM & Other usefule  variables ----
 Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)

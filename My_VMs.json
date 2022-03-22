@@ -85,7 +85,7 @@
       "Hostname": "vlab024211",
       "TemplateRegex": "Windows10_Dev",
       "Notes": ["Please dont do anything to this machine; Chances are I'm currently using this."],
-      "IPv4": "10.204.130.181",
+      "IPv4": "10.204.128.70",
       "Software": ["IG Dev Environment"]      
     },
     {

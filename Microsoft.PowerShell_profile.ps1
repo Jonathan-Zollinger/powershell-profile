@@ -1,61 +1,25 @@
 # ---- Import My Scripts ----
-Unblock-File $PSScriptRoot\General_Methods.ps1
-import-Module $PSScriptRoot\General_Methods.ps1
+$MyScripts = $(
+    "$PSScriptRoot\General_Methods.ps1",
+    "$PSScriptRoot\Import-inator.ps1"
+)
+foreach ($Script in $MyScripts){
+    Unblock-File $Script 
+    import-Module $Script
 
-# Shared Repos
-$MarionetteToolbox_Directory = "C:\Projects\MarionetteToolbox"
-$Computron_Directory = "C:\Projects\Computron"
-
-# Create a temp file to hold all the .ps1 files we want to import.
-Set-Variable -Scope script -Name 'Directories_To_Import' -Value $PSScriptRoot\Import_me
-New-Item $Directories_To_Import -Force | Out-Null
-$Import_Log = ("{0}\Imports_{1}.log" -f ($PSScriptRoot, (Get-Timestamp)))
-
-# Create the log file. If it's already there, dont overwrite it. 
-$Original_Logs = @(0, 0) #pass, fail
-New-Item $Import_Log -ErrorAction SilentlyContinue | Out-Null
-if(!$?){
-    $Original_Logs[0] = ((Get-Content $Import_Log) -match "^\[Info\]").Count
-    $Original_Logs[1] = ((Get-Content $Import_Log) -match "^\[Warning\]").Count
 }
-foreach ($Directory in $MarionetteToolbox_Directory, $Computron_Directory) {
-    Get-All-Ps1 $Directory $Directories_To_Import
-}
-foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
-    try {
-        Unblock-File $ps1_File
-        import-Module $ps1_File
-        Add-Content -Path $Import_Log -Value ("[Info][{1}] imported {0}." -f ($ps1_File, (Get-Timestamp -Full)))
-    }
-    catch {
-        Add-Content -Path $Import_Log -Value ("[Warning][{1}] Failed to import {0}." -f ($File, (Get-Timestamp -Full)))
-    }
-}
-Remove-Item $Directories_To_Import -Force
-Write-Output ("Finished importing modules. Successfully imported {0} files, Failed to import {1} file(s). for details use the 'Get-Content `$Import_Log' cmdlet." `
-    -f ((((Get-Content $Import_Log) -match "^\[Info\]").Count - $Original_Logs[0]),(((Get-Content $Import_Log) -match "^\[Warning\]").Count - $Original_Logs[1])))
 
-# ---- Set VM & Other usefule  variables ----
-Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
-
-Import-Json-Inventory "$PSScriptRoot\My_VMs.json" | out-null
-Set-Variable -Name "Cluster" -Value ($MyBoxes | Where-Object -Property Hostname -Match "vlab02420[0-3,5]$")
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope = 'Function', Target = '*')]
-$MyBoxes = @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206, 
-    $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
-
-
-function Get-Full-History {
+function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
 }
 
-function BuildIgDev {
+function Build-IgDev {
     Set-Location "C:\Projects\develop\idgov\"
     ./run_all.ps1
 }
 
 
-function UpdatePowershell {
+function Update-Powershell {
     Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
     .\Update_Powershell.ps1
     Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore

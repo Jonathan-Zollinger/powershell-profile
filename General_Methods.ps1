@@ -80,67 +80,49 @@ function Open-History{
     code (Get-PSReadlineOption).HistorySavePath
 }
 
-function Get-All-Ps1 {
+Set-Variable -Name LillyLog -Value ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME) -Scope Global
+function Write-LillyLog {
     <#
+    .NOTES
+    Author:  Jonathan Zollinger
+    Creation Date:  Mar 24 2022
+
     .DESCRIPTION
-    Recursively accumulates all the .ps1 files in a given directory and all subdirectories. The gathered .ps1 directories are added the provided imports_file. This is a useful resource when you have a respository of Powershell scripts and classes that are actively evolving and hosted with a VCS. By comparison, this ISN't a good resource when you've created a suite of Powershell scripts and classes that rarely change and aren't evolving, but act as a dependable resource for a community. In that case, a Powershell Module would be more suitable to host that resource. \end_rant
+    Appends a given log entry to a log file. The log file is located in the <repo-root>/logs directory. Logs are grouped by the date of the log entry. 
 
-    .PARAMETER Directory
-    The Directory provided which may contain .ps1 files and / or subdirectories
+    .PARAMETER Message
+    Single String value for a log entry. 
 
-    .PARAMETER Imports_File
-    File location where the list of gathered .ps1 files will be stored. 
 
-    .EXAMPLE
-    PS> New-Object -Path .\Temp_File
-    PS> Get-All-Ps1 C:\Projects\Crime_Fighting\ .\Temp_File
-    PS> foreach($File in (Get-Content .\Temp_File)){import-Module $File}
-    PS> Remove-Item -Path .\Temp_File
-    
-    #>
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory = $true)]
-        [String] $Directory,
-        [Parameter(Mandatory = $true)]
-        [String] $Imports_File
-    )
-    # Create the file. If it's already present, dont overwrite it. Suppress any error warnings. 
-    New-Item -Path $Imports_File -ErrorAction SilentlyContinue | Out-Null
-    
-    foreach($Sub_Directory in (Get-ChildItem -Path $Directory -Directory | Where-Object -Property Name -NotLike ".*")){
-        Get-All-Ps1 $Sub_Directory $Imports_File
-    }
-    foreach ($File in ((Get-ChildItem -Path $Directory -File -Filter "*.ps1"))) {
-        Add-Content $Imports_File $File.FullName
-    }
-}
-
-function Get-Timestamp {
-    <#
-    .DESCRIPTION
-    Returns a date string with the month, day and year.
-
-    .PARAMETER Full
-    Optional flag which changes the returned date string to include the hour and minute. The default date provided includes only month, day and year.
+    .PARAMETER LogFile
+    Optionally designate where the log file is to be saved. the Default location is the user's Documents folder.
     
     .EXAMPLE
-    1
-    PS> .\WarmUpBatmobile.ps1 | Out-File (".\WarmUpBatmobile_{0}.log" -f (Get-Timestamp -Full))
-
+    pipe output from another script to a log file.
+    > .\WarmUpBatmobile.ps1 | Write-Log -Info
+    
     .EXAMPLE
-    2
-    PS> "Stayed home to cry and watch Sandra Bullock's 'While You Were Sleeping'" | Out-File (".\CrimeFighting{0}.log" -f (Get-Timestamp))
+    Bruce Wayne's commitment to log entries can become too personal.
+    > Write-Log "Stayed home to cry and watch Sandra Bullock's 'While You Were Sleeping'" -Warning
     #>
     [CmdletBinding()]
     param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Message,
         [Parameter(Mandatory = $false)]
-        [switch]
-        $Full
+        [ValidateScript({ Test-Path -Path $_ })]
+        [String] $LogFile = ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME)
     )
-    $Date = (Get-date -Format o).Split("T")
-    if ($Full.IsPresent) {
-        return ($Date[0], ($Date[1].Split(":")[0..1] -join ".")) -join "_"
+
+    New-Item $LogFile -ErrorAction SilentlyContinue
+    if (-not (Get-Content $LogFile).Count) {
+        # Add a header if this is a new file.
+        $Lines = "-" * 40
+        Add-Content -Path $LogFile -Value $Lines
+        Add-Content -Path $LogFile -Value ("[{0}] {1}" -f ("TIMESTAMP", "Log Message"))
+        Add-Content -Path $LogFile -Value $Lines
     }
-    return $Date[0]
+    $Message = ("[{0}] {1}" -f ((Get-Date -UFormat "%H:%M:%S"), $Message)) 
+    Add-Content -Path $LogFile
 }

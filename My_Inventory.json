@@ -8,81 +8,81 @@
   "ResourcePool": "IGReporting",
   "Subnet":"22",
   "RedHatCredentialsFile": "C:\\Users\\jonat\\Documents\\redhat.cred",
-  "IgInstallScript":"C:\\Users\\jonat\\Micro Focus\\#Houston Interns - Automation\\scripts\\identitygovernance\\InstallScript-3.7.1.sh",
+  "IgInstallScript":"C:\\Users\\jonat\\Micro Focus\\#Houston Interns - Automation\\scripts\\identitygovernance\\InstallScript-3.7.2.sh",
   "BoxStack": [
     {
       "Hostname": "vlab024200",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.28",
       "Software": "HA Proxy,Postgres 11"
     },
     {
       "Hostname": "vlab024201",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.29",
       "Software": "IDM, OSP"
     },
     {
       "Hostname": "vlab024202",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.30",
       "Software": "NAM"
     },
     {
       "Hostname": "vlab024203",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.31",
       "Software": "Main IG Console"
     },
     {
       "Hostname": "vlab024204",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.31",
       "Software": "Main IG Console"
     },
     {
       "Hostname": "vlab024205",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.175",
       "Software": "IG Console"
     },
     {
       "Hostname": "vlab024206",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.176",
       "Software": "eDir"
     },
     {
       "Hostname": "vlab024207",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.177",
       "Software": "IG"
     },
     {
       "Hostname": "vlab024208",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.178",
       "Software": "IG"
     },
     {
       "Hostname": "vlab024209",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.179",
       "Software": "IG"
     },
     {
       "Hostname": "vlab024210",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.180",
       "Software": "IG"
@@ -93,12 +93,12 @@
       "Notes": [
         "Please dont do anything to this machine; Chances are I'm currently using this."
       ],
-      "IPv4": "10.204.128.70",
+      "IPv4": "10.204.130.181",
       "Software": "IG Dev Environment"
     },
     {
       "Hostname": "vlab024212",
-      "TemplateRegex": "^RHEL79_\\.*",
+      "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.182",
       "Software": "HTTP, Automation Maestro"

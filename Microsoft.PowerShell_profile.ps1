@@ -1,12 +1,22 @@
+
+Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
+
 # ---- Import My Scripts ----
 $MyScripts = $(
     "$PSScriptRoot\General_Methods.ps1",
     "$PSScriptRoot\Import-inator.ps1"
 )
-foreach ($Script in $MyScripts){
+foreach ($Script in $MyScripts) {
     Unblock-File $Script 
     import-Module $Script
+}
 
+foreach ($MyVariable in (Get-Variable | Where-Object -Property Name -Like "vlab0242*")){
+    $Number = $MyVariable.Name.Substring(8,2)
+    if($Number -like "0*"){
+        $Number = $Number[1]
+    }
+    New-Alias -Name "v$($Number)" -Value $MyVariable -Scope Global
 }
 
 function Get-FullHistory {

@@ -10,10 +10,10 @@ function Get-AllPs1 {
     File location where the list of gathered .ps1 files will be stored. 
 
     .EXAMPLE
-    PS> New-Object -Path .\Temp_File
-    PS> Get-All-Ps1 C:\Projects\Crime_Fighting\ .\Temp_File
-    PS> foreach($File in (Get-Content .\Temp_File)){import-Module $File}
-    PS> Remove-Item -Path .\Temp_File
+    > New-Object -Path .\Temp_File
+    > Get-All-Ps1 C:\Projects\Crime_Fighting\ .\Temp_File
+    > foreach($File in (Get-Content .\Temp_File)){import-Module $File}
+    > Remove-Item -Path .\Temp_File
     
     #>
     [CmdletBinding()]
@@ -71,8 +71,7 @@ Write-Output ("Finished importing modules. Successfully imported {0} files, Fail
 # ---- Set VM & Other usefule  variables ----
 Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
 
-Import-JsonInventory "$PSScriptRoot\My_Inventory.json" | Out-Null
-
-Set-Variable -Name "MyBoxes" -Scope Global -Value @(   $vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206,  $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
+Import-JsonInventory "$PSScriptRoot\My_Inventory.json" -ShortName
+Set-Variable -Name "MyBoxes" -Scope Global -Value @($vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206,  $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 
 

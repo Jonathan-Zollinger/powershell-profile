@@ -6,86 +6,101 @@
   "DNS2": "10.204.2.44",
   "DefaultGateway": "10.204.128.1",
   "ResourcePool": "IGReporting",
-  "Subnet":"22",
-  "RedHatCredentialsFile": "C:\\Users\\jonat\\Documents\\redhat.cred",
-  "IgInstallScript":"C:\\Users\\jonat\\Micro Focus\\#Houston Interns - Automation\\scripts\\identitygovernance\\InstallScript-3.7.2.sh",
+  "Subnet": "22",
+  "RedHatCredentialsFile": "C:\\Users\\Batman\\Documents\\redhat.cred",
+  "IgInstallScript": "C:\\Users\\jonat\\Micro Focus\\#Houston Interns - Automation\\scripts\\identitygovernance\\InstallScript-3.7.2.sh",
   "BoxStack": [
     {
       "Hostname": "vlab024200",
-      "TemplateRegex": "^RHEL83_\\.*",
+      "TemplateRegex": "^RHEL85GUI_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.28",
-      "Software": "HA Proxy,Postgres 11"
+      "Software": [
+        "eDir 9.2",
+        "NAM 4.5",
+        "PSQL 11.14",
+        "Apache ActiveMQ 5.16.2",
+        "ArcSight Enterprise Security Manager Suite 7.2"
+      ]
     },
     {
       "Hostname": "vlab024201",
-      "TemplateRegex": "^RHEL83_\\.*",
+      "TemplateRegex": "^RHEL85GUI_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.29",
-      "Software": "IDM, OSP"
+      "Software": [
+        "eDir 9.2.X",
+        "NAM 5.0.1",
+        "PSQL 11.X",
+        "Apache ActiveMQ 5.16.3",
+        "ArcSight Enterprise Security Manager Suite 7.5.0.2516"
+      ]
     },
     {
       "Hostname": "vlab024202",
-      "TemplateRegex": "^RHEL83_\\.*",
+      "TemplateRegex": "^RHEL85GUI_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.30",
-      "Software": "NAM"
+      "Software": [
+        "Identity Manager 4.8",
+        "Access Manager 4.5"
+      ]
     },
     {
       "Hostname": "vlab024203",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.128.31",
-      "Software": "Main IG Console"
+      "Software": ["Identity Manager 4.8.X"]
     },
     {
       "Hostname": "vlab024204",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
-      "IPv4": "10.204.128.31",
-      "Software": "Main IG Console"
+      "IPv4": "10.204.128.61",
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024205",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.175",
-      "Software": "IG Console"
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024206",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.176",
-      "Software": "eDir"
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024207",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.177",
-      "Software": "IG"
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024208",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.178",
-      "Software": "IG"
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024209",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.179",
-      "Software": "IG"
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024210",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.180",
-      "Software": "IG"
+      "Software": ["Testing Box"]
     },
     {
       "Hostname": "vlab024211",
@@ -94,14 +109,14 @@
         "Please dont do anything to this machine; Chances are I'm currently using this."
       ],
       "IPv4": "10.204.130.181",
-      "Software": "IG Dev Environment"
+      "Software": ["IG Dev Environment"]
     },
     {
       "Hostname": "vlab024212",
       "TemplateRegex": "^RHEL83_\\.*",
       "Notes": [],
       "IPv4": "10.204.130.182",
-      "Software": "HTTP, Automation Maestro"
+      "Software": ["HTTP, Automation Maestro"]
     }
   ]
 }

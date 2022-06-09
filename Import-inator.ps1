@@ -36,8 +36,8 @@ function Get-AllPs1 {
 
 
 # Shared Repos
-$MarionetteToolbox_Directory = "C:\Projects\MarionetteToolbox"
-$Computron_Directory = "C:\Projects\Computron"
+$MarionetteToolbox_Directory = "C:\Work_Repos\MarionetteToolbox"
+$Computron_Directory = "C:\Work_Repos\Computron"
 
 # Create a temp file to hold all the .ps1 files we want to import.
 Set-Variable -Scope script -Name 'Directories_To_Import' -Value $PSScriptRoot\Import_me

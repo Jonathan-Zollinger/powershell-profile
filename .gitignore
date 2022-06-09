@@ -2,4 +2,6 @@ Help/
 Modules/
 Scripts/
 .vscode/
+.idea/
 *.log
+*~

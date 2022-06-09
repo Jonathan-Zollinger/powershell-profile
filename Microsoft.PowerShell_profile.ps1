@@ -28,6 +28,20 @@ function Build-IgDev {
     ./run_all.ps1
 }
 
+function Checkup {
+    Test-ServerConnection
+    Get-Folder jzollinger | get-vm | Format-Table -AutoSize Name, PowerState, GuestId, Notes
+}
+
+function Build-Boxes {
+    [CmdletBinding()]
+    param ([Parameter()][Box[]] $Boxes)
+
+    foreach($Box in $Boxes){
+        Build-Box $Box -UpdateNetworking -ReplaceBox
+        Register-Box $Box
+    }
+}
 
 function Update-Powershell {
     Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1

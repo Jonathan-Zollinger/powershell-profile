@@ -38,10 +38,13 @@ function Build-Boxes {
     [CmdletBinding()]
     param ([Parameter()][Array[]] $Boxes)
 
+    $StartTime = Get-Date
     foreach($Box in $Boxes){
         Build-Box $Box -UpdateNetworking -ReplaceBox
         Register-Box $Box
     }
+    $TotalTime = Get-Date - $StartTime
+    Write-Output "Boxes $($Boxes -join(', ')) now built.`nTotal elapsed time: $($TotalTime)"
 }
 
 function Update-Powershell {

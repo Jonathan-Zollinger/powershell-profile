@@ -18,10 +18,6 @@ function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
 }
 
-function Build-IgDev {
-    Set-Location "C:\Projects\develop\idgov\"
-    ./run_all.ps1
-}
 
 function Checkup {
     Test-ServerConnection

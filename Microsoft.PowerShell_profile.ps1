@@ -1,6 +1,3 @@
-
-Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
-Set-Variable -Name "MyBoxes" -Scope Global -Value @($vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206,  $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 # ---- Import My Scripts ----
 $MyScripts = $(
     "$PSScriptRoot\General_Methods.ps1",
@@ -11,13 +8,11 @@ foreach ($Script in $MyScripts) {
     import-Module $Script
 }
 
-foreach ($MyVariable in (Get-Variable | Where-Object -Property Name -Like "vlab0242*")){
-    $Number = $MyVariable.Name.Substring(8,2)
-    if($Number -like "0*"){
-        $Number = $Number[1]
-    }
-    New-Alias -Name "v$($Number)" -Value $MyVariable -Scope Global
-}
+# ---- Set VM & Other usefule  variables ----
+Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
+Import-JsonInventory "$PSScriptRoot\My_Inventory.json" -ShortName
+Set-Variable -Name "MyBoxes" -Scope Global -Value @($v00, $v01, $v02, $v03, $v04, $v05, $v06,  $v07, $v08, $v09, $v10, $v11, $v12)
+Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
 
 function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
@@ -37,14 +32,10 @@ function Checkup {
 function Build-Boxes {
     [CmdletBinding()]
     param ([Parameter()][Array[]] $Boxes)
-
-    $StartTime = Get-Date
     foreach($Box in $Boxes){
-        Build-Box $Box -UpdateNetworking -ReplaceBox
-        Register-Box $Box
+        Build-Box $MyBoxes[$Box] -UpdateNetworking -ReplaceBox
+        Register-Box $MyBoxes[$Box]
     }
-    $TotalTime = Get-Date - $StartTime
-    Write-Output "Boxes $($Boxes -join(', ')) now built.`nTotal elapsed time: $($TotalTime)"
 }
 
 function Update-Powershell {

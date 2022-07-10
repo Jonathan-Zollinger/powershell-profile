@@ -33,8 +33,6 @@ function Get-AllPs1 {
         Add-Content $Imports_File $File.FullName
     }
 }
-
-
 # Shared Repos
 $MarionetteToolbox_Directory = "$($HOME)\Documents\MarionetteToolbox"
 
@@ -65,10 +63,5 @@ foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
 Remove-Item $Directories_To_Import -Force
 Write-Output ("Finished importing modules. Successfully imported {0} files, Failed to import {1} file(s). for details call 'Get-Content `$Import_Log'." `
         -f ((((Get-Content $Import_Log) -match "^\[Info\]").Count - $Original_Logs[0]), (((Get-Content $Import_Log) -match "^\[Warning\]").Count - $Original_Logs[1])))
-
-# ---- Set VM & Other usefule  variables ----
-Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
-
-Import-JsonInventory "$PSScriptRoot\My_Inventory.json" -ShortName
 
 

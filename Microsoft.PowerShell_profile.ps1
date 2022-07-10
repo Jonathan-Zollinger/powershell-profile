@@ -1,6 +1,6 @@
 
 Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
-
+Set-Variable -Name "MyBoxes" -Scope Global -Value @($vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206,  $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 # ---- Import My Scripts ----
 $MyScripts = $(
     "$PSScriptRoot\General_Methods.ps1",
@@ -33,9 +33,10 @@ function Checkup {
     Get-Folder jzollinger | get-vm | Format-Table -AutoSize Name, PowerState, GuestId, Notes
 }
 
+
 function Build-Boxes {
     [CmdletBinding()]
-    param ([Parameter()][Box[]] $Boxes)
+    param ([Parameter()][Array[]] $Boxes)
 
     foreach($Box in $Boxes){
         Build-Box $Box -UpdateNetworking -ReplaceBox

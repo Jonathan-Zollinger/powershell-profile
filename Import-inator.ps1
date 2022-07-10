@@ -36,8 +36,7 @@ function Get-AllPs1 {
 
 
 # Shared Repos
-$MarionetteToolbox_Directory = "C:\Work_Repos\MarionetteToolbox"
-$Computron_Directory = "C:\Work_Repos\Computron"
+$MarionetteToolbox_Directory = "$($HOME)\Documents\MarionetteToolbox"
 
 # Create a temp file to hold all the .ps1 files we want to import.
 Set-Variable -Scope script -Name 'Directories_To_Import' -Value $PSScriptRoot\Import_me
@@ -51,9 +50,8 @@ if (!$?) {
     $Original_Logs[0] = ((Get-Content $Import_Log) -match "^\[Info\]").Count
     $Original_Logs[1] = ((Get-Content $Import_Log) -match "^\[Warning\]").Count
 }
-foreach ($Directory in $MarionetteToolbox_Directory, $Computron_Directory) {
-    Get-AllPs1 $Directory $Directories_To_Import
-}
+Write-Output "Importing Modules..."
+Get-AllPs1 $MarionetteToolbox_Directory $Directories_To_Import 
 foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
     try {
         Unblock-File $ps1_File
@@ -72,6 +70,5 @@ Write-Output ("Finished importing modules. Successfully imported {0} files, Fail
 Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
 
 Import-JsonInventory "$PSScriptRoot\My_Inventory.json" -ShortName
-Set-Variable -Name "MyBoxes" -Scope Global -Value @($vlab024200, $vlab024201, $vlab024202, $vlab024203, $vlab024204, $vlab024205, $vlab024206,  $vlab024207, $vlab024208, $vlab024209, $vlab024210, $vlab024211, $vlab024212)
 
 

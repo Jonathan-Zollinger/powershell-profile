@@ -14,6 +14,27 @@ Import-JsonInventory "$PSScriptRoot\My_Inventory.json" -ShortName
 Set-Variable -Name "MyBoxes" -Scope Global -Value @($v00, $v01, $v02, $v03, $v04, $v05, $v06,  $v07, $v08, $v09, $v10, $v11, $v12)
 Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
 
+function Compile{
+    [CmdletBinding()]
+    param ([Parameter()][String]
+    [ValidateScript({ Test-Path -Path $_ })] 
+    $Directory)
+    $RepoName = Split-Path $Directory -Leaf
+    $Directories_To_Compile = "$($PSScriptRoot)\$($RepoName)_Directories_To_Compile_$($(Get-Date -UFormat "%Y-%m-%d")).txt"
+    New-Item $Directories_To_Compile -Force
+    # $Import_Log = ("{0}\Imports_{1}.log" -f ($PSScriptRoot, (Get-Date -UFormat "%Y-%m-%d")))
+    Get-AllPs1 $Directory $Directories_To_Compile
+    
+    $NewModule = "$($(Split-Path $Profile))\$($RepoName))"
+    if (Test-Path -Path $NewModule) {
+        Write-Warning "Removing $($NewModule)..."
+        Remove-Item $NewModule
+    }
+    New-Item -Path $NewModule
+    foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
+        Add-Content -Path $NewModule -VAlue (Get-Content $ps1_File)
+    }
+}
 function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
 }

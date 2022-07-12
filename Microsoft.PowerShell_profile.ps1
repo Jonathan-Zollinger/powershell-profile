@@ -14,6 +14,13 @@
 # Set-Variable -Name "MyBoxes" -Scope Global -Value @($v00, $v01, $v02, $v03, $v04, $v05, $v06,  $v07, $v08, $v09, $v10, $v11, $v12)
 # Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
 
+function MavenCompile{
+    mvn clean compile -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
+}
+
+function MavenInstall{
+    mvn clean install -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
+}
 
 function CompileModule{
     [CmdletBinding()]

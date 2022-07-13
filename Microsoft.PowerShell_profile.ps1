@@ -14,19 +14,31 @@
 # Set-Variable -Name "MyBoxes" -Scope Global -Value @($v00, $v01, $v02, $v03, $v04, $v05, $v06,  $v07, $v08, $v09, $v10, $v11, $v12)
 # Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
 
-function MavenCompile{
+function MavenCompile {
     mvn clean compile -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
 }
 
-function MavenInstall{
+function MavenInstall {
     mvn clean install -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
 }
 
-function CompileModule{
+function Backup {
+    [CmdletBinding()]param ([Parameter()]
+        [String]
+        [ValidateScript({ Test-Path -Path $_ })] 
+        $Directory)
+
+    $newDir = "$(Split-Path -Path $Directory -Parent)\.$(Split-Path -Path $Directory -Leaf)_$(Get-Date -UFormat "%Y-%m-%d")"
+
+    Copy-Item -Path $Directory -Destination $newDir -Recurse
+    Write-Output "Created $($newDir)"
+}
+
+function CompileModule {
     [CmdletBinding()]
     param ([Parameter()][String]
-    [ValidateScript({ Test-Path -Path $_ })] 
-    $Directory)
+        [ValidateScript({ Test-Path -Path $_ })] 
+        $Directory)
     $RepoName = Split-Path $Directory -Leaf
     $Directories_To_Compile = "$($PSScriptRoot)\$($RepoName)_Directories_To_Compile_$($(Get-Date -UFormat "%Y-%m-%d")).txt"
     New-Item $Directories_To_Compile -Force
@@ -57,7 +69,7 @@ function Checkup {
 function Build-Boxes {
     [CmdletBinding()]
     param ([Parameter()][Array[]] $Boxes)
-    foreach($Box in $Boxes){
+    foreach ($Box in $Boxes) {
         Build-Box $MyBoxes[$Box] -UpdateNetworking -ReplaceBox
         Register-Box $MyBoxes[$Box]
     }

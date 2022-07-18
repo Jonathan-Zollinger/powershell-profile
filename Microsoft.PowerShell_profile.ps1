@@ -34,27 +34,6 @@ function Backup {
     Write-Output "Created $($newDir)"
 }
 
-function CompileModule {
-    [CmdletBinding()]
-    param ([Parameter()][String]
-        [ValidateScript({ Test-Path -Path $_ })] 
-        $Directory)
-    $RepoName = Split-Path $Directory -Leaf
-    $Directories_To_Compile = "$($PSScriptRoot)\$($RepoName)_Directories_To_Compile_$($(Get-Date -UFormat "%Y-%m-%d")).txt"
-    New-Item $Directories_To_Compile -Force
-    # $Import_Log = ("{0}\Imports_{1}.log" -f ($PSScriptRoot, (Get-Date -UFormat "%Y-%m-%d")))
-    Get-AllPs1 $Directory $Directories_To_Compile
-    
-    $NewModule = "$($(Split-Path $Profile))\$($RepoName))"
-    if (Test-Path -Path $NewModule) {
-        Write-Warning "Removing $($NewModule)..."
-        Remove-Item $NewModule
-    }
-    New-Item -Path $NewModule
-    foreach ($ps1_File in (Get-Content $Directories_To_Import)) {
-        Add-Content -Path $NewModule -VAlue (Get-Content $ps1_File)
-    }
-}
 function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
 }
@@ -79,6 +58,89 @@ function Update-Powershell {
     Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
     .\Update_Powershell.ps1
     Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
+}
+
+function Write-Comment() {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)] [string] $Comment,
+        [Parameter(Mandatory = $false)] [switch] $Java,
+        [Parameter(Mandatory = $false)] [switch] $Python,
+        [Parameter(Mandatory = $false)] [switch] $Powershell
+    )
+    $Comment_Character
+    if ($Python.IsPresent -or $Powershell.IsPresent) {
+        $Comment_Character = "#"
+    }
+    else {
+        #default to java comment
+        $Comment_Character = "//"
+    }
+    $SideBanner = "-" * ((25 - $Comment.Length) / 2)
+    Write-Output ("{0} {1} {2} {1}" -f $Comment_Character, $SideBanner, $Comment ) | Set-Clipboard
+}
+
+function Write-Header {
+    param([string[]] $Header)
+    $Header_Width = 0
+    foreach ($Line in $Header) {
+        if ($Line.Length -gt $Header_Width) {
+            $Header_Width = $Line.Length
+        }
+    }    
+    $Header_Width += 5
+    Write-Output "$('#' * ($Header_Width))"
+    foreach ($Line in $Header) {
+        Write-Output "#  $($Line + ' ' * ($Header_Width - $Line.Length-4))#"
+    }
+    Write-Output "$('#' * ($Header_Width))"
+}
+
+Set-Variable -Name LillyLog -Value ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME) -Scope Global
+function Write-LillyLog {
+    <#
+    .NOTES
+    Author:  Jonathan Zollinger
+    Creation Date:  Mar 24 2022
+
+    .DESCRIPTION
+    Appends a given log entry to a log file. The log file is located in the <repo-root>/logs directory. Logs are grouped by the date of the log entry. 
+
+    .PARAMETER Message
+    Single String value for a log entry. 
+
+
+    .PARAMETER LogFile
+    Optionally designate where the log file is to be saved. the Default location is the user's Documents folder.
+    
+    .EXAMPLE
+    pipe output from another script to a log file.
+    > .\WarmUpBatmobile.ps1 | Write-Log -Info
+    
+    .EXAMPLE
+    Bruce Wayne's commitment to log entries can become too personal.
+    > Write-Log "Stayed home to cry and watch Sandra Bullock's 'While You Were Sleeping'" -Warning
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Message,
+        [Parameter(Mandatory = $false)]
+        [ValidateScript({ Test-Path -Path $_ })]
+        [String] $LogFile = ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME)
+    )
+
+    New-Item $LogFile -ErrorAction SilentlyContinue
+    if (-not (Get-Content $LogFile).Count) {
+        # Add a header if this is a new file.
+        $Lines = "-" * 40
+        Add-Content -Path $LogFile -Value $Lines
+        Add-Content -Path $LogFile -Value ("[{0}] {1}" -f ("TIMESTAMP", "Log Message"))
+        Add-Content -Path $LogFile -Value $Lines
+    }
+    $Message = ("[{0}] {1}" -f ((Get-Date -UFormat "%H:%M:%S"), $Message)) 
+    Add-Content -Path $LogFile
 }
 
 function Show-Progress {

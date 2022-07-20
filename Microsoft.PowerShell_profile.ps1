@@ -1,18 +1,10 @@
-# # ---- Import My Scripts ----
-# $MyScripts = $(
-#     "$PSScriptRoot\General_Methods.ps1",
-#     "$PSScriptRoot\Import-inator.ps1"
-# )
-# foreach ($Script in $MyScripts) {
-#     Unblock-File $Script 
-#     import-Module $Script
-# }
-
+$DebugPreference = "Continue"
 # # ---- Set VM & Other usefule  variables ----
-# Set-Variable -Name "ProfileDirectory" -Value $PROFILE.Substring(0, $PROFILE.LastIndexOf("\") + 1)
-# Import-JsonInventory "$PSScriptRoot\My_Inventory.json" -ShortName
-# Set-Variable -Name "MyBoxes" -Scope Global -Value @($v00, $v01, $v02, $v03, $v04, $v05, $v06,  $v07, $v08, $v09, $v10, $v11, $v12)
-# Set-Variable -Name "MarionetteLogFile" -Value ("{0}\Documents\PSscript_log_{1}.log" -f ($HOME, (Get-Date -UFormat "%Y-%m-%d"))) -Scope Global
+Import-Module MarionetteToolbox
+$BoxInventory = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
+Write-Debug "attempting to import $($BoxInventory) with the -Shortname flag."
+Import-Boxes -JsonInventoryFile "$(Split-Path $PROFILE -Parent)\My_Inventory.json" -ShortName
+Write-Debug "imported $($BoxInventory). All variables are now `n$(Get-Variable | Select-Object -Property Name, Value | Format-Table)"
 
 function MavenCompile {
     mvn clean compile -D"ia.root"="C:\Program Files\InstallAnywhere 2021"

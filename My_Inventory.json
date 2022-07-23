@@ -7,8 +7,6 @@
   "DefaultGateway": "10.204.128.1",
   "ResourcePool": "IGReporting",
   "Subnet": "22",
-  "RedHatCredentialsFile": "C:\\Users\\Batman\\Documents\\redhat.cred",
-  "IgInstallScript": "C:\\Users\\jonat\\Micro Focus\\#Houston Interns - Automation\\scripts\\identitygovernance\\InstallScript-3.7.2.sh",
   "BoxStack": [
     {
       "Hostname": "vlab024200",

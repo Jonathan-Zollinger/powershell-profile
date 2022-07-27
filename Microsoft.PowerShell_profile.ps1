@@ -1,9 +1,10 @@
-$DebugPreference = "Continue"
+# $DebugPreference = "Continue"
 # # ---- Set VM & Other usefule  variables ----
-Import-Module MarionetteToolbox
+# Import-Module MarionetteToolbox
+# TODO(Jonathan) update marionette toolbox import once module is released.
 $BoxInventory = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
 Write-Debug "attempting to import $($BoxInventory) with the -Shortname flag."
-Import-Boxes -JsonInventoryFile "$(Split-Path $PROFILE -Parent)\My_Inventory.json" -ShortName
+# Import-Boxes -JsonInventoryFile "$(Split-Path $PROFILE -Parent)\My_Inventory.json" -ShortName
 Write-Debug "imported $($BoxInventory). All variables are now `n$(Get-Variable | Select-Object -Property Name, Value | Format-Table)"
 
 function MavenCompile {
@@ -12,6 +13,24 @@ function MavenCompile {
 
 function MavenInstall {
     mvn clean install -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
+}
+
+
+function Get-Commits {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [String] $GitHead,
+        [Paramter(Mandatory = $false)]
+        [Switch] $Passthru
+    )
+    $Commits = (git log "$($GitHead)..HEAD" --oneline --reverse --no-notes)
+    $Summation = @()
+    foreach($Commit in $Commits){
+
+    }
+
+
 }
 
 function Backup {
@@ -55,21 +74,46 @@ function Update-Powershell {
 function Write-Comment() {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)] [string] $Comment,
+        [ValidateNotNullOrEmpty] [Parameter(Mandatory = $true)] [string] $Comment,
         [Parameter(Mandatory = $false)] [switch] $Java,
         [Parameter(Mandatory = $false)] [switch] $Python,
-        [Parameter(Mandatory = $false)] [switch] $Powershell
+        [Parameter(Mandatory = $false)] [switch] $Powershell,
+        [Parameter(Mandatory = $false)] [switch] $BashFunction,
+        [Parameter(Mandatory = $false)] [switch] $Bash
     )
+    ValidateParameterCount($PSBoundParameters, 2)
     $Comment_Character
-    if ($Python.IsPresent -or $Powershell.IsPresent) {
-        $Comment_Character = "#"
+
+    switch ($PSBoundParameters.Keys) {
+        $BashFunction {
+            $Header = "#" * 40
+            $FunctionTags = @(
+                "#Globals"
+                "Arguments"
+                "Outputs"
+                "Returns"
+                "Examples"
+            )
+            Write-Output (@($Header, ($FunctionTags -join ":`n#   `n# "), $Header) -join "`n") | Set-Clipboard
+            return
+        }
+        $Python     {<#continue to bash#>}
+        $Powershell {<#continue to bash#>}
+        $Bash       {$Comment_Character = "# "}
+        default     {$Comment_Character = "// "}
     }
-    else {
-        #default to java comment
-        $Comment_Character = "//"
-    }
-    $SideBanner = "-" * ((25 - $Comment.Length) / 2)
+
+    $SideBanner = "-" * ((40 - $Comment.Length) / 2)
     Write-Output ("{0} {1} {2} {1}" -f $Comment_Character, $SideBanner, $Comment ) | Set-Clipboard
+}
+
+function ValidateParameterCount(){
+    [CmdletBinding()]
+    param (
+        [PSBoundParametersDictionary] $Parameters,
+        [Int32] $ParameterCount
+    )
+    return ($Parameters.Values.Count -eq $ParameterCount)
 }
 
 function Write-Header {

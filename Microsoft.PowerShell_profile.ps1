@@ -15,20 +15,49 @@ function Maven {
         [Parameter(Mandatory=$false)]
         [switch] $Compile,
         [Parameter(Mandatory = $false)]
-        [switch] $Install
+        [switch] $Install,
+        [Parameter(Mandatory = $false)]
+        [switch] $Bash
     )
-    switch -Regex ($PSBoundParameters.Keys) {
-        
-    $MavenCommand = "mvn clean compile -D`"ia.root`"=`"C:\Program Files\InstallAnywhere 2021`""
-    if($Passthru.IsPresent){
-        Write-Output $MavenCommand | Set-Clipboard
-        return $MavenCommand
+    #--- validate args ------
+    $Errors = @(
+        "Specify whether maven is to install or compile."
+        "Too many arguments provided."
+        )
+    if ($PSBoundParameters.Keys -ne "Compile" -and
+        $PSBoundParameters.Keys -ne "Install") {
+        throw $Errors[0]
+    }elseif($PSBoundParameters.Keys -contains "Compile" -and 
+            $PSBoundParameters.Keys -contains "Install"){
+        throw "$($Errors[1])`n$($Errors[0])"
     }
-    & $MavenCommand
-}
 
-function MavenInstall {
-    mvn clean install -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
+    #---- compile args ------
+        $MavenCommand = @("mvn")
+        $ProfileFlag = "-Dia.root=/root/InstallAnywhere\ 2021"
+    switch -Regex ($PSBoundParameters.Keys) {
+        "Install"{
+            $MavenCommand.add("install")
+        }
+        "Compile"{
+            $MavenCommand.add("compile")
+        }
+        "Bash"{
+            $ProfileFlag = "-D`"ia.root`"=`"C:\Program Files\InstallAnywhere 2021`""
+        }
+        "Passthru"{
+            $MavenCommand.Add($ProfileFlag)
+            Write-Output ($MavenCommand -join " ") | Set-Clipboard
+            Write-Output "Copied!"
+            break;
+        }
+        Default{
+            $MavenCommand.Add($ProfileFlag)
+            & ($MavenCommand -join " ")
+        }
+    }
+
+    
 }
 
 
@@ -65,12 +94,10 @@ function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
 }
 
-
 function Checkup {
     Test-ServerConnection
     Get-Folder jzollinger | get-vm | Format-Table -AutoSize Name, PowerState, GuestId, Notes
 }
-
 
 function Build-Boxes {
     [CmdletBinding()]

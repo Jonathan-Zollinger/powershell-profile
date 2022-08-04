@@ -7,8 +7,24 @@ Write-Debug "attempting to import $($BoxInventory) with the -Shortname flag."
 # Import-Boxes -JsonInventoryFile "$(Split-Path $PROFILE -Parent)\My_Inventory.json" -ShortName
 Write-Debug "imported $($BoxInventory). All variables are now `n$(Get-Variable | Select-Object -Property Name, Value | Format-Table)"
 
-function MavenCompile {
-    mvn clean compile -D"ia.root"="C:\Program Files\InstallAnywhere 2021"
+function Maven {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false)]
+        [switch] $Passthru,
+        [Parameter(Mandatory=$false)]
+        [switch] $Compile,
+        [Parameter(Mandatory = $false)]
+        [switch] $Install
+    )
+    switch -Regex ($PSBoundParameters.Keys) {
+        
+    $MavenCommand = "mvn clean compile -D`"ia.root`"=`"C:\Program Files\InstallAnywhere 2021`""
+    if($Passthru.IsPresent){
+        Write-Output $MavenCommand | Set-Clipboard
+        return $MavenCommand
+    }
+    & $MavenCommand
 }
 
 function MavenInstall {
@@ -74,46 +90,57 @@ function Update-Powershell {
 function Write-Comment() {
     [CmdletBinding()]
     param (
-        [ValidateNotNullOrEmpty] [Parameter(Mandatory = $true)] [string] $Comment,
+        [Parameter(Mandatory = $true, Position = 0)] [string] $Comment,
         [Parameter(Mandatory = $false)] [switch] $Java,
         [Parameter(Mandatory = $false)] [switch] $Python,
         [Parameter(Mandatory = $false)] [switch] $Powershell,
         [Parameter(Mandatory = $false)] [switch] $BashFunction,
         [Parameter(Mandatory = $false)] [switch] $Bash
     )
-    ValidateParameterCount($PSBoundParameters, 2)
-    $Comment_Character
-
-    switch ($PSBoundParameters.Keys) {
-        $BashFunction {
+    if ($PSBoundParameters.Count -ne 2){
+        throw "Write-Comment expected to receive 2 arguments, `
+        recieved $($PSBoundParameters.Count)."
+    }
+    $CommentCharacter
+    $DebugLog = "Using {0} style comment character"
+    Write-Debug "Determining what escape character is used based on switch parameter passed."
+    $Switch = $PSBoundParameters.Keys | Select-String -NotMatch "Comment"
+    Write-Debug "The switch passed is the `"$($Switch)`" switch"
+    switch -Regex ($PSBoundParameters.Keys) {
+        "BashFunction" {
             $Header = "#" * 40
             $FunctionTags = @(
-                "#Globals"
+                "# Globals"
                 "Arguments"
                 "Outputs"
                 "Returns"
-                "Examples"
+                "Examples:`n#   `n#"
             )
-            Write-Output (@($Header, ($FunctionTags -join ":`n#   `n# "), $Header) -join "`n") | Set-Clipboard
+            $Output = (@(
+                "#! /bin/bash",
+                "# $($Comment)`n"
+                $Header, "# $($Comment)",
+                ($FunctionTags -join ":`n#   `n#`n# "),
+                "# Author: Jonathan Zollinger",
+                "# Date:  $(Get-Date -UFormat ' %Y-%m-%d')",
+                $Header) -join "`n")
+            Write-Output $Output | Set-Clipboard
+            Write-Debug "Copied to clipboard the following:`n$($Output)"
             return
         }
-        $Python     {<#continue to bash#>}
-        $Powershell {<#continue to bash#>}
-        $Bash       {$Comment_Character = "# "}
-        default     {$Comment_Character = "// "}
+        "(Python)|(Powershell)|(Bash)" {
+            Write-Debug ($DebugLog -f "Bash")
+            $CommentCharacter = "# "
+            break
+        }        
+        default     {
+            Write-Debug ($DebugLog -f "Java")
+            $CommentCharacter = "// "
+        }
     }
 
     $SideBanner = "-" * ((40 - $Comment.Length) / 2)
-    Write-Output ("{0} {1} {2} {1}" -f $Comment_Character, $SideBanner, $Comment ) | Set-Clipboard
-}
-
-function ValidateParameterCount(){
-    [CmdletBinding()]
-    param (
-        [PSBoundParametersDictionary] $Parameters,
-        [Int32] $ParameterCount
-    )
-    return ($Parameters.Values.Count -eq $ParameterCount)
+    Write-Output ("{0} {1} {2} {1}" -f $CommentCharacter, $SideBanner, $Comment ) | Set-Clipboard
 }
 
 function Write-Header {

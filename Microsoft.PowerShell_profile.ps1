@@ -1,11 +1,29 @@
-# $DebugPreference = "Continue"
-# # ---- Set VM & Other usefule  variables ----
-# Import-Module MarionetteToolbox
-# TODO(Jonathan) update marionette toolbox import once module is released.
 $BoxInventory = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
 Write-Debug "attempting to import $($BoxInventory) with the -Shortname flag."
 # Import-Boxes -JsonInventoryFile "$(Split-Path $PROFILE -Parent)\My_Inventory.json" -ShortName
 Write-Debug "imported $($BoxInventory). All variables are now `n$(Get-Variable | Select-Object -Property Name, Value | Format-Table)"
+
+Set-Variable -Name MyModules -Scope Global -Value @(
+    "$($Home)\Documents\Powershell\Modules\Build-Module\",
+    "$($Home)\Documents\Powershell\Modules\vSphere-Commons\"
+)
+
+function Set-DebugPreference {
+    [CmdletBinding()]
+    param (
+        [Parameter(ParameterSetName = "On", Mandatory = $false)]
+        [switch] $On,
+        [Parameter(ParameterSetName = "Off", Mandatory = $false)]
+        [switch] $Off
+    )
+    $DebugValue = $null
+    switch ($PSCmdlet.ParameterSetName) {
+        Off { $DebugValue = "SilentlyContinue"; break}
+        On { $DebugValue = "Continue"; break}
+        Default { Throw "Provide either the -On or -Off flag for Set-Debug"}
+    }
+    Set-Variable -Scope Global -Name DebugPreference -Value $DebugValue
+}
 
 function Maven {
     [CmdletBinding()]
@@ -56,27 +74,22 @@ function Maven {
             & ($MavenCommand -join " ")
         }
     }
-
-    
 }
 
 
-function Get-Commits {
-    [CmdletBinding()]
-    param (
-        [Parameter()]
-        [String] $GitHead,
-        [Paramter(Mandatory = $false)]
-        [Switch] $Passthru
-    )
-    $Commits = (git log "$($GitHead)..HEAD" --oneline --reverse --no-notes)
-    $Summation = @()
-    foreach($Commit in $Commits){
-
-    }
-
-
-}
+# function Get-Commits {
+#     [CmdletBinding()]
+#     param (
+#         [Parameter()]
+#         [String] $GitHead,
+#         [Paramter(Mandatory = $false)]
+#         [Switch] $Passthru
+#     )
+#     $Commits = (git log "$($GitHead)..HEAD" --oneline --reverse --no-notes)
+#     $Summation = @()
+#     foreach($Commit in $Commits){
+#     }
+# }
 
 function Backup {
     [CmdletBinding()]param ([Parameter()]

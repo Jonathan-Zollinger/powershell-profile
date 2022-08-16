@@ -1,12 +1,17 @@
-$BoxInventory = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
-Write-Debug "attempting to import $($BoxInventory) with the -Shortname flag."
-# Import-Boxes -JsonInventoryFile "$(Split-Path $PROFILE -Parent)\My_Inventory.json" -ShortName
-Write-Debug "imported $($BoxInventory). All variables are now `n$(Get-Variable | Select-Object -Property Name, Value | Format-Table)"
-
 Set-Variable -Name MyModules -Scope Global -Value @(
     "$($Home)\Documents\Powershell\Modules\Build-Module\",
     "$($Home)\Documents\Powershell\Modules\vSphere-Commons\"
 )
+
+$MyVariables = @{
+    "BoxInventory" = "$(Split-Path $PROFILE -Parent)/My_Inventory.json"
+    "RedHatCredentialsFile" = "$($Home)\Documents\redhat.cred"
+    "vSphereCredentialsFile" = "$($Home)\Documents\vSphereLogin.cred"
+}
+
+foreach($MyVariable in $MyVariables.Keys){
+    Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
+}
 
 function Set-DebugPreference {
     [CmdletBinding()]

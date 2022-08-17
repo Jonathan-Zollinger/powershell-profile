@@ -3,14 +3,68 @@ Set-Variable -Name MyModules -Scope Global -Value @(
     "$($Home)\Documents\Powershell\Modules\vSphere-Commons\"
 )
 
-$MyVariables = @{
-    "BoxInventory" = "$(Split-Path $PROFILE -Parent)/My_Inventory.json"
+Set-Variable -Name MyVariables -Scope Script -Value @{
+    "BoxInventory" = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
     "RedHatCredentialsFile" = "$($Home)\Documents\redhat.cred"
     "vSphereCredentialsFile" = "$($Home)\Documents\vSphereLogin.cred"
 }
 
 foreach($MyVariable in $MyVariables.Keys){
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
+}
+Remove-Variable -Name MyVariable
+
+function Update-MyModule{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Directory })]
+        [string] $Path = $PSScriptRoot
+    )
+    $PsmFile, $PsdFile = $null
+    foreach ($FileType in "psm1", "psd1"){
+        $TempObject = Get-ChildItem $Path | Where-Object -Property Name -Like "*.$($FileType)"
+        if ($TempObject.Count -ne 1){
+            throw "incompatible count of .psm1 files found. expected 1 and found $($TempObject.Count)."
+            Exit
+        }
+        switch ($FileType) {
+            "psm1" {$PsmFile = $TempObject ;break}
+            "psd1" {$PsdFile = $TempObject ; break}
+        }
+    }
+    $Module = Split-Path $PsmFile -LeafBase    
+    #TODO(Jonathan Z) copy files over existing files in /Powershell/Modules/<module>/directory 
+}
+
+Function Find {
+    <#
+    .SYNOPSIS
+    Recursively searches a directory for a string in directory names and file names. The search can be performed through file content instead using the -Content flag.
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false, Position = 0)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Directory })]
+        [string] $Directory,
+        [Parameter(Mandatory = $false, Position = 0)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
+        [string] $File,
+        [Parameter(Mandatory = $false, Position = 1)]
+        [switch] $Name,
+        [Parameter(Mandatory = $false, Position = 1)]
+        [switch] $Content,
+        [ValidateNotNullOrEmpty]
+        [string] $FindMe
+
+    )
+    if($Content.IsPresent){ 
+        if($File.IsPresent){
+            return Select-String -Path $File $FindMe
+        }
+        return Get-ChildItem $Directory -Recurse | Select-String $FindMe
+    }
+    return Get-ChildItem $Directory -Recurse $FindMe    #Default behavior is to search file and directory names
 }
 
 function Set-DebugPreference {

@@ -1,3 +1,4 @@
+[
 {
   "Email": "jonathan.zollinger@microfocus.com",
   "FolderName": "jzollinger",
@@ -7,12 +8,12 @@
   "DefaultGateway": "10.204.128.1",
   "ResourcePool": "IGReporting",
   "Subnet": "22",
-  "BoxStack": [
+  "Boxes": [
     {
       "Hostname": "vlab024200",
       "TemplateRegex": "^RHEL86",
       "Notes": [],
-      "IPv4": "10.204.128.28",
+      "IPv4": "10.204.130.170",
       "Software": [
         "eDir 9.2",
         "NAM 4.5",
@@ -23,7 +24,7 @@
       "Hostname": "vlab024201",
       "TemplateRegex": "^RHEL86",
       "Notes": [],
-      "IPv4": "10.204.128.29",
+      "IPv4": "10.204.130.171",
       "Software": [
         "eDir 9.2.X",
         "NAM 5.0.1",
@@ -34,7 +35,7 @@
       "Hostname": "vlab024202",
       "TemplateRegex": "^RHEL86",
       "Notes": [],
-      "IPv4": "10.204.128.30",
+      "IPv4": "10.204.130.172",
       "Software": [
         "Identity Manager 4.8",
         "Apache ActiveMQ 5.16.3",
@@ -45,7 +46,7 @@
       "Hostname": "vlab024203",
       "TemplateRegex": "^RHEL86",
       "Notes": [],
-      "IPv4": "10.204.128.31",
+      "IPv4": "10.204.130.173",
       "Software": [
         "Identity Manager 4.8.X",
         "PSQL 11.X",
@@ -119,3 +120,4 @@
     }
   ]
 }
+]

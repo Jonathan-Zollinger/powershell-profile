@@ -1,13 +1,13 @@
-Set-Variable -Name MyModules -Scope Global -Value @(
-    "$($Home)\Documents\Powershell\Modules\Build-Module\",
-    "$($Home)\Documents\Powershell\Modules\vSphere-Commons\"
-)
-
+#  ---------------- variables ----------------
+#setting variables using set-variables removes warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
-    "BoxInventory" = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
-    "RedHatCredentialsFile" = "$($Home)\Documents\redhat.cred"
+    "BoxInventory"           = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
+    "RedHatCredentialsFile"  = "$($Home)\Documents\redhat.cred"
     "vSphereCredentialsFile" = "$($Home)\Documents\vSphereLogin.cred"
     "HostsFile"              = "C:\Windows\System32\drivers\etc\hosts"
+    "vSphere-Commons"        = "$($Home)\Documents\Repos\vSphere-Commons"
+    "MyModules"              = @("$($Home)\Documents\Powershell\Modules\Build-Module\",
+                                 "$($Home)\Documents\Powershell\Modules\vSphere-Commons\")
 }
 
 foreach($MyVariable in $MyVariables.Keys){
@@ -15,6 +15,12 @@ foreach($MyVariable in $MyVariables.Keys){
 }
 Remove-Variable -Name MyVariable, MyVariables
 
+
+#  ---------------- functions ----------------
+
+function PowerUpTheMainHyperdrive {
+    Import-Module vSphere-Commons
+}
 function Update-Hosts {   
     $OriginalHosts = Get-Content $HostsFile 
     Write-Output $OriginalHosts[$Content.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile

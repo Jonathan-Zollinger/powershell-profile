@@ -6,7 +6,7 @@
   "DNS1": "10.204.2.43",
   "DNS2": "10.204.2.44",
   "DefaultGateway": "10.204.128.1",
-  "ResourcePool": "IGReporting",
+  "ResourcePool": "IG",
   "Subnet": "22",
   "Boxes": [
     {

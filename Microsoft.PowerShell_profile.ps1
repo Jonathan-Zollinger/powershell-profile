@@ -7,13 +7,23 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "BoxInventory" = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
     "RedHatCredentialsFile" = "$($Home)\Documents\redhat.cred"
     "vSphereCredentialsFile" = "$($Home)\Documents\vSphereLogin.cred"
+    "HostsFile"              = "C:\Windows\System32\drivers\etc\hosts"
 }
 
 foreach($MyVariable in $MyVariables.Keys){
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
 }
-Remove-Variable -Name MyVariable
+Remove-Variable -Name MyVariable, MyVariables
 
+function Update-Hosts {   
+    $OriginalHosts = Get-Content $HostsFile 
+    Write-Output $OriginalHosts[$Content.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile
+    Write-Output $OriginalHosts[$Content.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile -Append
+    Write-Output $NewContent | Out-File $HostsFile
+    #TODO(Jonathan) add shortname as a Box property
+    foreach($Box in $MyBoxes) { Write-Output "$($Box.ipv4)`t$($Box.FQDN)`t$($Box.shortname)" | Out-File $HostsFile -Append }
+    Write-Output $OriginalHosts[$OriginalHosts.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile -Append
+}
 function Update-MyModule{
     [CmdletBinding()]
     param (
@@ -44,17 +54,16 @@ Function Find {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false, Position = 0)]
-        [ValidateScript({ Test-Path -Path $_ -PathType Directory })]
+        [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "Directory")]
+        [ValidateScript({ Test-Path -Path $_ -PathType Container })]
         [string] $Directory,
-        [Parameter(Mandatory = $false, Position = 0)]
+        [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "File")]
         [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
         [string] $File,
-        [Parameter(Mandatory = $false, Position = 1)]
+        [Parameter(Mandatory = $false, Position = 2, ParameterSetName = "Name")]
         [switch] $Name,
-        [Parameter(Mandatory = $false, Position = 1)]
+        [Parameter(Mandatory = $false, Position = 2, ParameterSetName = "Content")]
         [switch] $Content,
-        [ValidateNotNullOrEmpty]
         [string] $FindMe
 
     )
@@ -82,57 +91,6 @@ function Set-DebugPreference {
         Default { Throw "Provide either the -On or -Off flag for Set-Debug"}
     }
     Set-Variable -Scope Global -Name DebugPreference -Value $DebugValue
-}
-
-function Maven {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory=$false)]
-        [switch] $Passthru,
-        [Parameter(Mandatory=$false)]
-        [switch] $Compile,
-        [Parameter(Mandatory = $false)]
-        [switch] $Install,
-        [Parameter(Mandatory = $false)]
-        [switch] $Bash
-    )
-    #--- validate args ------
-    $Errors = @(
-        "Specify whether maven is to install or compile."
-        "Too many arguments provided."
-        )
-    if ($PSBoundParameters.Keys -ne "Compile" -and
-        $PSBoundParameters.Keys -ne "Install") {
-        throw $Errors[0]
-    }elseif($PSBoundParameters.Keys -contains "Compile" -and 
-            $PSBoundParameters.Keys -contains "Install"){
-        throw "$($Errors[1])`n$($Errors[0])"
-    }
-
-    #---- compile args ------
-        $MavenCommand = @("mvn")
-        $ProfileFlag = "-Dia.root=/root/InstallAnywhere\ 2021"
-    switch -Regex ($PSBoundParameters.Keys) {
-        "Install"{
-            $MavenCommand.add("install")
-        }
-        "Compile"{
-            $MavenCommand.add("compile")
-        }
-        "Bash"{
-            $ProfileFlag = "-D`"ia.root`"=`"C:\Program Files\InstallAnywhere 2021`""
-        }
-        "Passthru"{
-            $MavenCommand.Add($ProfileFlag)
-            Write-Output ($MavenCommand -join " ") | Set-Clipboard
-            Write-Output "Copied!"
-            break;
-        }
-        Default{
-            $MavenCommand.Add($ProfileFlag)
-            & ($MavenCommand -join " ")
-        }
-    }
 }
 
 
@@ -167,15 +125,18 @@ function Get-FullHistory {
 }
 
 function Checkup {
-    Test-ServerConnection
-    Get-Folder jzollinger | get-vm | Format-Table -AutoSize Name, PowerState, GuestId, Notes
+    Get-Folder jzollinger | get-vm | Format-Table -AutoSize Name, PowerState, Notes
 }
 
 function Build-Boxes {
     [CmdletBinding()]
     param ([Parameter()][Array[]] $Boxes)
-    foreach ($Box in $Boxes) {
-        Build-Box $MyBoxes[$Box] -UpdateNetworking -ReplaceBox
+    (Get-Variable | Select-Object -Property Name) -match "MyBoxes"
+    if($Matches.count -eq 0){
+        throw "`$MyBoxes isn't assigned. Cannot run this script without that global variable assigned."
+    }
+    foreach ($Box in $MyBoxes) {
+        Build-Box $MyBoxes[$Box] -UpdateNetworking -ReplaceBox #TODO(Jonathan) update this to be more graceful when encountering a box that doesn't exist and thus doesn't need to be replaced.
         Register-Box $MyBoxes[$Box]
     }
 }
@@ -412,3 +373,55 @@ function Show-Progress {
     } #Process
     
 } #function
+
+function Maven {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [switch] $Passthru,
+        [Parameter(Mandatory = $false)]
+        [switch] $Compile,
+        [Parameter(Mandatory = $false)]
+        [switch] $Install,
+        [Parameter(Mandatory = $false)]
+        [switch] $Bash
+    )
+    #--- validate args ------
+    $Errors = @(
+        "Specify whether maven is to install or compile."
+        "Too many arguments provided."
+    )
+    if ($PSBoundParameters.Keys -ne "Compile" -and
+        $PSBoundParameters.Keys -ne "Install") {
+        throw $Errors[0]
+    }
+    elseif ($PSBoundParameters.Keys -contains "Compile" -and 
+        $PSBoundParameters.Keys -contains "Install") {
+        throw "$($Errors[1])`n$($Errors[0])"
+    }
+
+    #---- compile args ------
+    $MavenCommand = @("mvn")
+    $ProfileFlag = "-Dia.root=/root/InstallAnywhere\ 2021"
+    switch -Regex ($PSBoundParameters.Keys) {
+        "Install" {
+            $MavenCommand.add("install")
+        }
+        "Compile" {
+            $MavenCommand.add("compile")
+        }
+        "Bash" {
+            $ProfileFlag = "-D`"ia.root`"=`"C:\Program Files\InstallAnywhere 2021`""
+        }
+        "Passthru" {
+            $MavenCommand.Add($ProfileFlag)
+            Write-Output ($MavenCommand -join " ") | Set-Clipboard
+            Write-Output "Copied!"
+            break;
+        }
+        Default {
+            $MavenCommand.Add($ProfileFlag)
+            & ($MavenCommand -join " ")
+        }
+    }
+}

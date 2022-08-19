@@ -20,6 +20,7 @@ Remove-Variable -Name MyVariable, MyVariables
 
 function PowerUpTheMainHyperdrive {
     Import-Module vSphere-Commons
+    Import-Boxes $BoxInventory -KeepList -ShortName
 }
 function Update-Hosts {   
     $OriginalHosts = Get-Content $HostsFile 

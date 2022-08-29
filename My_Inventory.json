@@ -57,7 +57,7 @@
       "Hostname": "vlab024204",
       "TemplateRegex": "^RHEL86",
       "Notes": [],
-      "IPv4": "10.204.128.61",
+      "IPv4": "10.204.130.174",
       "Software": ["Testing Box"]
     },
     {

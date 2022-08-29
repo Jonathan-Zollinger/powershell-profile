@@ -132,7 +132,7 @@ function Get-FullHistory {
 }
 
 function Checkup {
-    Get-Folder jzollinger | get-vm | Format-Table -AutoSize Name, PowerState, Notes
+    Get-Folder jzollinger | get-vm | Sort-Object -Property Name | Format-Table -AutoSize Name, PowerState, Notes -Wrap
 }
 
 function Build-Boxes {

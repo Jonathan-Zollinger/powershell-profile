@@ -27,7 +27,7 @@
       "IPv4": "10.204.130.171",
       "Software": [
         "eDir 9.2.X",
-        "NAM 5.0.1",
+        "NAM 5.0.2 (5.0 Service Pack 2)",
         "Apache ActiveMQ 5.16.2"
       ]
     },

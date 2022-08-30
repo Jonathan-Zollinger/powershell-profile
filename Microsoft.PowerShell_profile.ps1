@@ -132,7 +132,12 @@ function Get-FullHistory {
 }
 
 function Checkup {
-    Get-Folder jzollinger | get-vm | Sort-Object -Property Name | Format-Table -AutoSize Name, PowerState, Notes -Wrap
+    Get-Folder jzollinger | get-vm | Sort-Object Name | Format-Table @{N = "Box Name";E = {$_.Name}}, 
+        @{N = "Creation Date"; E = {$_.CreateDate.ToString("MM/d/yyyy")}},
+        @{N = "Power State";E = {$_.PowerState}},
+        @{N="Snap Count";E={$_.CustomFields['Snapshots']}},
+        @{N = "OS";E = {$_.GuestId -Replace("Guest", "")}; },
+        @{N = "Role(s)";E = {($_.Notes -split "`n" | Select-Object -Skip 1) -join "`n"}} -Wrap -AutoSize
 }
 
 function Build-Boxes {

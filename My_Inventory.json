@@ -8,6 +8,7 @@
   "DefaultGateway": "10.204.128.1",
   "ResourcePool": "IG",
   "Subnet": "22",
+  "InstallHelperRepo": "C:/Users/Batman/Documents/Repos/install-helper-scripts",
   "Boxes": [
     {
       "Hostname": "vlab024200",

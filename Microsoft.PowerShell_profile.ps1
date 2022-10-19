@@ -1,4 +1,6 @@
 #  ---------------- variables ----------------
+#  to get a vmware error type, use <error>.InnerException[1].GetType().FullName
+$ErrorActionPreference = 'Stop'
 #setting variables using set-variables removes warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
     "BoxInventory"           = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
@@ -7,16 +9,17 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "HostsFile"              = "C:\Windows\System32\drivers\etc\hosts"
     "vSphere-Commons"        = "$($Home)\Documents\Repos\vSphere-Commons"
     "MyModules"              = @("$($Home)\Documents\Powershell\Modules\Build-Module\",
-                                 "$($Home)\Documents\Powershell\Modules\vSphere-Commons\")
+        "$($Home)\Documents\Powershell\Modules\vSphere-Commons\")
 }
 
-foreach($MyVariable in $MyVariables.Keys){
+foreach ($MyVariable in $MyVariables.Keys) {
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
 }
-Remove-Variable -Name MyVariable, MyVariables
+Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVariable" and "$MyVariables"
 
 
 #  ---------------- functions ----------------
+
 
 function PowerUpTheMainHyperdrive {
     Import-Module vSphere-Commons
@@ -28,10 +31,11 @@ function Update-Hosts {
     Write-Output $OriginalHosts[$Content.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile -Append
     Write-Output $NewContent | Out-File $HostsFile
     #TODO(Jonathan) add shortname as a Box property
-    foreach($Box in $MyBoxes) { Write-Output "$($Box.ipv4)`t$($Box.FQDN)`t$($Box.shortname)" | Out-File $HostsFile -Append }
+    foreach ($Box in $MyBoxes) { Write-Output "$($Box.ipv4)`t$($Box.FQDN)`t$($Box.shortname)" | Out-File $HostsFile -Append }
     Write-Output $OriginalHosts[$OriginalHosts.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile -Append
 }
-function Update-MyModule{
+
+function Update-MyModule {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]
@@ -39,18 +43,18 @@ function Update-MyModule{
         [string] $Path = $PSScriptRoot
     )
     $PsmFile, $PsdFile = $null
-    foreach ($FileType in "psm1", "psd1"){
+    foreach ($FileType in "psm1", "psd1") {
         $TempObject = Get-ChildItem $Path | Where-Object -Property Name -Like "*.$($FileType)"
-        if ($TempObject.Count -ne 1){
+        if ($TempObject.Count -ne 1) {
             throw "incompatible count of .psm1 files found. expected 1 and found $($TempObject.Count)."
             Exit
         }
         switch ($FileType) {
-            "psm1" {$PsmFile = $TempObject ;break}
-            "psd1" {$PsdFile = $TempObject ; break}
+            "psm1" { $PsmFile = $TempObject ; break }
+            "psd1" { $PsdFile = $TempObject ; break }
         }
     }
-    $Module = Split-Path $PsmFile -LeafBase    
+    # $Module = Split-Path $PsmFile -LeafBase    
     #TODO(Jonathan Z) copy files over existing files in /Powershell/Modules/<module>/directory 
 }
 
@@ -74,8 +78,8 @@ Function Find {
         [string] $FindMe
 
     )
-    if($Content.IsPresent){ 
-        if($File.IsPresent){
+    if ($Content.IsPresent) { 
+        if ($File.IsPresent) {
             return Select-String -Path $File $FindMe
         }
         return Get-ChildItem $Directory -Recurse | Select-String $FindMe
@@ -93,9 +97,9 @@ function Set-DebugPreference {
     )
     $DebugValue = $null
     switch ($PSCmdlet.ParameterSetName) {
-        Off { $DebugValue = "SilentlyContinue"; break}
-        On { $DebugValue = "Continue"; break}
-        Default { Throw "Provide either the -On or -Off flag for Set-Debug"}
+        Off { $DebugValue = "SilentlyContinue"; break }
+        On { $DebugValue = "Continue"; break }
+        Default { Throw "Provide either the -On or -Off flag for Set-Debug" }
     }
     Set-Variable -Scope Global -Name DebugPreference -Value $DebugValue
 }
@@ -132,19 +136,19 @@ function Get-FullHistory {
 }
 
 function Checkup {
-    Get-Folder jzollinger | get-vm | Sort-Object Name | Format-Table @{N = "Box Name";E = {$_.Name}}, 
-        @{N = "Creation Date"; E = {$_.CreateDate.ToString("MM/d/yyyy")}},
-        @{N = "Power State";E = {$_.PowerState}},
-        @{N="Snap Count";E={$_.CustomFields['Snapshots']}},
-        @{N = "OS";E = {$_.GuestId -Replace("Guest", "")}; },
-        @{N = "Role(s)";E = {($_.Notes -split "`n" | Select-Object -Skip 1) -join "`n"}} -Wrap -AutoSize
+    Get-Folder jzollinger | get-vm | Sort-Object Name | Format-Table @{N = "Box Name"; E = { $_.Name } }, 
+    @{N = "Creation Date"; E = { $_.CreateDate.ToString("MM/d/yyyy") } },
+    @{N = "Power State"; E = { $_.PowerState } },
+    @{N = "Snap Count"; E = { $_.CustomFields['Snapshots'] } },
+    @{N = "OS"; E = { $_.GuestId -Replace ("Guest", "") }; },
+    @{N = "Role(s)"; E = { ($_.Notes -split "`n" | Select-Object -Skip 1) -join "`n" } } -Wrap -AutoSize
 }
 
 function Build-Boxes {
     [CmdletBinding()]
     param ([Parameter()][Array[]] $Boxes)
     (Get-Variable | Select-Object -Property Name) -match "MyBoxes"
-    if($Matches.count -eq 0){
+    if ($Matches.count -eq 0) {
         throw "`$MyBoxes isn't assigned. Cannot run this script without that global variable assigned."
     }
     foreach ($Box in $MyBoxes) {
@@ -169,7 +173,7 @@ function Write-Comment() {
         [Parameter(Mandatory = $false)] [switch] $BashFunction,
         [Parameter(Mandatory = $false)] [switch] $Bash
     )
-    if ($PSBoundParameters.Count -ne 2){
+    if ($PSBoundParameters.Count -ne 2) {
         throw "Write-Comment expected to receive 2 arguments, `
         recieved $($PSBoundParameters.Count)."
     }
@@ -189,13 +193,13 @@ function Write-Comment() {
                 "Examples:`n#   `n#"
             )
             $Output = (@(
-                "#! /bin/bash",
-                "# $($Comment)`n"
-                $Header, "# $($Comment)",
+                    "#! /bin/bash",
+                    "# $($Comment)`n"
+                    $Header, "# $($Comment)",
                 ($FunctionTags -join ":`n#   `n#`n# "),
-                "# Author: Jonathan Zollinger",
-                "# Date:  $(Get-Date -UFormat ' %Y-%m-%d')",
-                $Header) -join "`n")
+                    "# Author: Jonathan Zollinger",
+                    "# Date:  $(Get-Date -UFormat ' %Y-%m-%d')",
+                    $Header) -join "`n")
             Write-Output $Output | Set-Clipboard
             Write-Debug "Copied to clipboard the following:`n$($Output)"
             return
@@ -205,7 +209,7 @@ function Write-Comment() {
             $CommentCharacter = "# "
             break
         }        
-        default     {
+        default {
             Write-Debug ($DebugLog -f "Java")
             $CommentCharacter = "// "
         }
@@ -229,6 +233,40 @@ function Write-Header {
         Write-Output "#  $($Line + ' ' * ($Header_Width - $Line.Length-4))#"
     }
     Write-Output "$('#' * ($Header_Width))"
+}
+
+function Rename-Branch () {
+
+    <#
+    .SYNOPSIS
+    provides the git cmdlet to rename the currently checked out branch. The cmdlet is made avaialble in the clipboard.  
+
+    .PARAMETER BranchNames
+    pair of strings, first is the current branch name, second is the name to be used. If one string is provided, it's assumed the current branch name is master. if no arguments are provided, it's assumed the current branch name is master and the new branch is to be named main.
+    
+    .PARAMETER Passthru
+    Use the Passthru switch to employ the cmdlet immediately instead of placing the cmdlet in the clipboard.
+
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [String[]] $BranchNames,
+        [Parameter(Mandatory = $false)]
+        [Switch] $Passthru
+    )
+    $gitOptions = @(
+        "-c credential.helper=",
+        "-c core.quotepath=false", 
+        "log.showSignature=false"
+        )
+
+
+    if ( $Passthru.IsPresent ) {
+        #TODO all the things
+    }
+
+
 }
 
 Set-Variable -Name LillyLog -Value ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME) -Scope Global
@@ -437,3 +475,5 @@ function Maven {
         }
     }
 }
+$ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
+Invoke-Expression (&starship init powershell)

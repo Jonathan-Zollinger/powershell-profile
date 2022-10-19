@@ -1,0 +1,67 @@
+format = """
+[](#2b2f77)\
+$username\
+$directory\
+$git_branch\
+$docker_context\
+$time\
+[ ](fg:#2b2f77)\
+"""
+
+# symbols: https://www.nerdfonts.com/cheat-sheet
+
+# Disable the blank line at the start of the prompt
+# add_newline = false
+
+# You can also replace your username with a neat symbol like  to save some space
+[username]
+show_always = true
+style_user = "bg:#2b2f77"
+style_root = "bg:#2b2f77"
+format = '[ $user ]($style)'
+
+[directory]
+style = "bg:#2b2f77 fg:#d3d7cf"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+style = "bg:#2b2f77 fg:#d3d7cf"
+"Documents" = " "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+# Keep in mind that the order matters. For example:
+# "Important Documents" = "  "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important  " = "  "
+
+
+[docker_context]
+style = "bg:#2b2f77 fg:#d3d7cf"
+symbol = " "
+format = "[ $symbol ]($style)"
+
+[git_branch]
+style = "bg:#2b2f77 fg:#0ac721"
+symbol = " "
+format = """
+[]($style)\
+[ on $symbol $branch ](fg:#d3d7cf bg:#0ac721)\
+[ ]($style)\
+"""
+
+
+[memory_usage]
+style = "bg:#2b2f77 fg:#d3d7cf"
+symbol = " "
+format = "[ $symbol ]($style)"
+
+[python]
+style = "bg:#2b2f77 fg:#d3d7cf"
+symbol = " "
+format = "[ $symbol ]($style)"

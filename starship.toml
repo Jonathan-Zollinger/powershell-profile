@@ -3,7 +3,7 @@ $username\
 $directory\
 $git_branch\
 $docker_context
-[](fg:Green)\
+[ ](fg:Green)\
 """
 
 # symbols: https://www.nerdfonts.com/cheat-sheet
@@ -32,7 +32,7 @@ format = """\
 [](fg:blue bg:purple)\
 [](fg:cyan bg:purple)\
 [ ](bg:cyan)\
-[ ](fg:cyan)\
+[](fg:cyan)\
 """
 truncation_length = 3
 truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"

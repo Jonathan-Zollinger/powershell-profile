@@ -1,7 +1,8 @@
 #  ---------------- variables ----------------
-#  to find an error type, use <error>.InnerException[1].GetType().FullName
-$ErrorActionPreference = 'Stop'
-#setting variables using set-variables removes warnings for unused variables.
+
+$ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
+
+# Setting variables using set-variables (like below) removes IDE warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"

@@ -1,15 +1,11 @@
 #  ---------------- variables ----------------
-#  to get a vmware error type, use <error>.InnerException[1].GetType().FullName
+#  to find an error type, use <error>.InnerException[1].GetType().FullName
 $ErrorActionPreference = 'Stop'
 #setting variables using set-variables removes warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
-    "BoxInventory"           = "$(Split-Path $PROFILE -Parent)\My_Inventory.json"
-    "RedHatCredentialsFile"  = "$($Home)\Documents\redhat.cred"
-    "vSphereCredentialsFile" = "$($Home)\Documents\vSphereLogin.cred"
-    "HostsFile"              = "C:\Windows\System32\drivers\etc\hosts"
-    "vSphere-Commons"        = "$($Home)\Documents\Repos\vSphere-Commons"
-    "MyModules"              = @("$($Home)\Documents\Powershell\Modules\Build-Module\",
-        "$($Home)\Documents\Powershell\Modules\vSphere-Commons\")
+    "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
+    "PowershellHome" = "$($Home)\Documents\Powershell"
+    "Projects"       = "$($Home)\Projects"
 }
 
 foreach ($MyVariable in $MyVariables.Keys) {
@@ -19,21 +15,6 @@ Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVar
 
 
 #  ---------------- functions ----------------
-
-
-function PowerUpTheMainHyperdrive {
-    Import-Module vSphere-Commons
-    Import-Boxes $BoxInventory -KeepList -ShortName
-}
-function Update-Hosts {   
-    $OriginalHosts = Get-Content $HostsFile 
-    Write-Output $OriginalHosts[$Content.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile
-    Write-Output $OriginalHosts[$Content.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile -Append
-    Write-Output $NewContent | Out-File $HostsFile
-    #TODO(Jonathan) add shortname as a Box property
-    foreach ($Box in $MyBoxes) { Write-Output "$($Box.ipv4)`t$($Box.FQDN)`t$($Box.shortname)" | Out-File $HostsFile -Append }
-    Write-Output $OriginalHosts[$OriginalHosts.IndexOf($End)..$OriginalHosts.Count] | Out-File $HostsFile -Append
-}
 
 function Update-MyModule {
     [CmdletBinding()]
@@ -46,7 +27,7 @@ function Update-MyModule {
     foreach ($FileType in "psm1", "psd1") {
         $TempObject = Get-ChildItem $Path | Where-Object -Property Name -Like "*.$($FileType)"
         if ($TempObject.Count -ne 1) {
-            throw "incompatible count of .psm1 files found. expected 1 and found $($TempObject.Count)."
+            Write-Error "incompatible count of .psm1 files found. expected 1 and found $($TempObject.Count)."
             Exit
         }
         switch ($FileType) {
@@ -104,37 +85,11 @@ function Set-DebugPreference {
     Set-Variable -Scope Global -Name DebugPreference -Value $DebugValue
 }
 
-
-# function Get-Commits {
-#     [CmdletBinding()]
-#     param (
-#         [Parameter()]
-#         [String] $GitHead,
-#         [Paramter(Mandatory = $false)]
-#         [Switch] $Passthru
-#     )
-#     $Commits = (git log "$($GitHead)..HEAD" --oneline --reverse --no-notes)
-#     $Summation = @()
-#     foreach($Commit in $Commits){
-#     }
-# }
-
-function Backup {
-    [CmdletBinding()]param ([Parameter()]
-        [String]
-        [ValidateScript({ Test-Path -Path $_ })] 
-        $Directory)
-
-    $newDir = "$(Split-Path -Path $Directory -Parent)\.$(Split-Path -Path $Directory -Leaf)_$(Get-Date -UFormat "%Y-%m-%d")"
-
-    Copy-Item -Path $Directory -Destination $newDir -Recurse
-    Write-Output "Created $($newDir)"
-}
-
 function Get-FullHistory {
     code (Get-PSReadlineOption).HistorySavePath
 }
 
+#TODO(Jonathan) add this to peanutbutter before removing from profile
 function Checkup {
     Get-Folder jzollinger | get-vm | Sort-Object Name | Format-Table @{N = "Box Name"; E = { $_.Name } }, 
     @{N = "Creation Date"; E = { $_.CreateDate.ToString("MM/d/yyyy") } },
@@ -143,6 +98,8 @@ function Checkup {
     @{N = "OS"; E = { $_.GuestId -Replace ("Guest", "") }; },
     @{N = "Role(s)"; E = { ($_.Notes -split "`n" | Select-Object -Skip 1) -join "`n" } } -Wrap -AutoSize
 }
+
+#TODO(Jonathan) add this to peanutbutter before removing from profile
 
 function Build-Boxes {
     [CmdletBinding()]
@@ -158,12 +115,14 @@ function Build-Boxes {
 }
 
 function Update-Powershell {
+    #TODO(Jonathan) Document this tool
     Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
     .\Update_Powershell.ps1
     Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
 }
 
 function Write-Comment() {
+    #TODO(Jonathan) Document this tool
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $Comment,
@@ -220,6 +179,7 @@ function Write-Comment() {
 }
 
 function Write-Header {
+    #TODO(Jonathan) Document this tool
     param([string[]] $Header)
     $Header_Width = 0
     foreach ($Line in $Header) {
@@ -255,66 +215,19 @@ function Rename-Branch () {
         [Parameter(Mandatory = $false)]
         [Switch] $Passthru
     )
-    $gitOptions = @(
-        "-c credential.helper=",
-        "-c core.quotepath=false", 
-        "log.showSignature=false"
-        )
+    # $gitOptions = @(
+    #     "-c credential.helper=",
+    #     "-c core.quotepath=false", 
+    #     "log.showSignature=false"
+    # )
 
 
     if ( $Passthru.IsPresent ) {
-        #TODO all the things
+    #TODO(Jonathan) #TODO all the things
     }
-
 
 }
 
-Set-Variable -Name LillyLog -Value ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME) -Scope Global
-function Write-LillyLog {
-    <#
-    .NOTES
-    Author:  Jonathan Zollinger
-    Creation Date:  Mar 24 2022
-
-    .DESCRIPTION
-    Appends a given log entry to a log file. The log file is located in the <repo-root>/logs directory. Logs are grouped by the date of the log entry. 
-
-    .PARAMETER Message
-    Single String value for a log entry. 
-
-
-    .PARAMETER LogFile
-    Optionally designate where the log file is to be saved. the Default location is the user's Documents folder.
-    
-    .EXAMPLE
-    pipe output from another script to a log file.
-    > .\WarmUpBatmobile.ps1 | Write-Log -Info
-    
-    .EXAMPLE
-    Bruce Wayne's commitment to log entries can become too personal.
-    > Write-Log "Stayed home to cry and watch Sandra Bullock's 'While You Were Sleeping'" -Warning
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [string] $Message,
-        [Parameter(Mandatory = $false)]
-        [ValidateScript({ Test-Path -Path $_ })]
-        [String] $LogFile = ("{0}\OneDrive\Home\Family\Lilly-isms.log" -f $HOME)
-    )
-
-    New-Item $LogFile -ErrorAction SilentlyContinue
-    if (-not (Get-Content $LogFile).Count) {
-        # Add a header if this is a new file.
-        $Lines = "-" * 40
-        Add-Content -Path $LogFile -Value $Lines
-        Add-Content -Path $LogFile -Value ("[{0}] {1}" -f ("TIMESTAMP", "Log Message"))
-        Add-Content -Path $LogFile -Value $Lines
-    }
-    $Message = ("[{0}] {1}" -f ((Get-Date -UFormat "%H:%M:%S"), $Message)) 
-    Add-Content -Path $LogFile
-}
 
 function Show-Progress {
     <#

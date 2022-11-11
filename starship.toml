@@ -26,7 +26,7 @@ format = """\
 style = "bg:Blue fg:White"
 format = """\
 [](fg:cyan)\
-[](bg:purple)\
+[](fg:cyan bg:purple)\
 [](fg:blue bg:purple)\
 [$path]($style)\
 [](fg:blue bg:purple)\
@@ -38,7 +38,7 @@ truncation_length = 3
 truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"
 
 # Here is how you can shorten some long paths by text replacement
-# similar to mapped_locations in Oh My Posh:
+# similar to mapped_locations in Oh My Posh
 [directory.substitutions]
 style = "bg:Blue fg:White"
 "Documents" = " "

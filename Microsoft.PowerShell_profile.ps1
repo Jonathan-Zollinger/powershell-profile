@@ -17,6 +17,52 @@ Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVar
 
 #  ---------------- functions ----------------
 
+function Get-NewBranch {
+    <#
+    .SYNOPSIS
+    Creates a new branch for the current git repo.
+
+    .DESCRIPTION
+    Creates a new branch using the provided name. Creates an upstream branch on the default remote repo. Sets the newly created remote repo as the upstream branch for the newly created local repo.
+
+    .INPUTS
+    - Remote repo configured for the local git repo. Get-NewBranch will throw errormessage "No git remote configured for this repo"
+    - Unique name of branch to be named. If name is not unique, Get-NewBranch will throw errormessage "New Branch name is already used."
+    
+    .PARAMETER BranchName
+    Name for the branch to be named. BranchName must comply with git documentation. see https://git-scm.com/docs/git-check-ref-format. BranchName must be unique from local and remote branches.
+
+    .OUTPUTS
+    Nothing on success, throws error messages on failures.
+
+    .EXAMPLE
+    git clone git@test/example/new-branch.git; cd new-branch
+    Get-NewBranch 'My-Example'
+
+    #>
+
+    [CmdletBinding()]
+    param (
+        [String]
+        [ValidateScript({ git check-ref-format --branch $_ })]
+        $BranchName
+    )
+    
+    try {
+        if ( (git branch -a --list $BranchName).Length -ne 0 ){
+            throw "$($BranchName) is not a unique name"
+        }
+        if ( (git remote).Length -eq 0 ) {
+            throw "No remote repo configured for this git repo"
+        }
+    }
+    catch [ System.Management.Automation.RuntimeException ]
+    { throw  "fatal: not a git repository (or any of the parent directories)"}
+
+    git checkout -b $BranchName
+    git push (git remote) $BranchName --set-upstream    
+}
+
 function Update-MyModule {
     [CmdletBinding()]
     param (
@@ -224,7 +270,7 @@ function Rename-Branch () {
 
 
     if ( $Passthru.IsPresent ) {
-    #TODO(Jonathan) #TODO all the things
+        #TODO(Jonathan) #TODO all the things
     }
 
 }

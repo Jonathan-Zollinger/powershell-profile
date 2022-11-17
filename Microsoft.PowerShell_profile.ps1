@@ -1,3 +1,8 @@
+
+#  --------------- Alias...i? ---------------
+
+Set-Alias -Name "dc" -Value docker-compose
+
 #  ---------------- variables ----------------
 
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures

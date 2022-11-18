@@ -12,6 +12,10 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
     "Projects"       = "$($Home)\Projects"
+    "Projects"     = @(
+    	"$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob",
+    	"$($Home)\Projects"
+	)
 }
 
 foreach ($MyVariable in $MyVariables.Keys) {

@@ -1,6 +1,10 @@
 
 #  --------------- Alias...i? ---------------
 
+Set-Variable -Name MyVariables -Scope Script -Value @{
+    "dc"       = docker-compose
+    "inkscape" = "C:\Program Files\Inkscape\bin\inkscape.exe"
+}
 Set-Alias -Name "dc" -Value docker-compose
 
 #  ---------------- variables ----------------
@@ -11,11 +15,10 @@ $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at fail
 Set-Variable -Name MyVariables -Scope Script -Value @{
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
-    "Projects"       = "$($Home)\Projects"
-    "Projects"     = @(
-    	"$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob",
-    	"$($Home)\Projects"
-	)
+    "Projects"       = @(
+        "$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob",
+        "$($Home)\Projects"
+    )
 }
 
 foreach ($MyVariable in $MyVariables.Keys) {
@@ -25,6 +28,47 @@ Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVar
 
 
 #  ---------------- functions ----------------
+
+function Sync-Branches {
+    <#
+    .SYNOPSIS
+    Removes branches whose upstream branches aren't on remote
+
+    .INPUTS
+     - Remote repo configured for the local git repo. Get-NewBranch will throw errormessage "No git remote configured for this repo"
+
+    .PARAMETER Force
+    Force delete a branch with no matching remote branch. This is useful if PR's are merged via "Squash and Merge", as git will erroneously see the local branch as not fully merged
+
+    .EXAMPLE
+    ** does something amazing and commits it **
+    > git push
+    ** submits pull request in browser, PR is approved and branch deleted remotely **
+    > Sync-Branches
+    ** profites-en **
+
+    .EXAMPLE
+    > git checkout -b "Peter-Pan-is-a-good-person"
+    ** regrets life decisions. **
+    > git checkout main
+    # you could force delete this branch, or you could force sync branches
+    > Sync-Branches -Force
+
+
+    #>
+
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [Switch] $Force
+    )
+
+    try {
+        #TODO(Jonathan) query remote branches, compare to local. change delete flag based on $Force
+    }
+    catch [ System.Management.Automation.RuntimeException ]
+    { throw  "fatal: not a git repository (or any of the parent directories)" }
+}
 
 function Get-NewBranch {
     <#
@@ -58,7 +102,7 @@ function Get-NewBranch {
     )
     
     try {
-        if ( (git branch -a --list $BranchName).Length -ne 0 ){
+        if ( (git branch -a --list $BranchName).Length -ne 0 ) {
             throw "$($BranchName) is not a unique name"
         }
         if ( (git remote).Length -eq 0 ) {
@@ -66,10 +110,12 @@ function Get-NewBranch {
         }
     }
     catch [ System.Management.Automation.RuntimeException ]
-    { throw  "fatal: not a git repository (or any of the parent directories)"}
+    { throw  "fatal: not a git repository (or any of the parent directories)" }
 
     git checkout -b $BranchName
     git push (git remote) $BranchName --set-upstream    
+
+    #TODO(Jonathan) add pester tests
 }
 
 function Update-MyModule {

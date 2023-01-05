@@ -15,7 +15,7 @@ $docker_context
 [username]
 show_always = true
 style_user = "bg:Purple fg:White"
-style_root = "bg:Purple fg:Red"
+style_root = "bg:Purple fg:White"
 format = """\
 [ ](Purple)\
 [ Z☻llinger ]($style)\
@@ -26,11 +26,10 @@ format = """\
 style = "bg:Blue fg:White"
 format = """\
 [](fg:cyan)\
-[](fg:cyan bg:purple)\
-[](fg:blue bg:purple)\
+[ ](bg:cyan)\
+[](fg:cyan bg:blue)\
 [$path]($style)\
-[](fg:blue bg:purple)\
-[](fg:cyan bg:purple)\
+[](fg:cyan bg:blue)\
 [ ](bg:cyan)\
 [](fg:cyan)\
 """

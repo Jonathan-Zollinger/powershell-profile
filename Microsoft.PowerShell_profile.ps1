@@ -2,13 +2,14 @@
 #  --------------- Alias...i? ---------------
 
 Set-Alias -Name "dc" -Value docker-compose
-
+Set-Alias -Name "Reboot" -Value Restart-Computer
 #  ---------------- variables ----------------
 
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 
 # Setting variables using set-variables (like below) removes IDE warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
+    "mygit"	     = "git@github.com:Jonathan-Zollinger/"
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
     "Projects"     = @(

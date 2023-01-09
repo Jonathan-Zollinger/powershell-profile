@@ -16,17 +16,9 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "mygit"	     = "git@github.com:Jonathan-Zollinger/"
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
-<<<<<<< HEAD
     "Projects"       = @(
-        "$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob",
-        "$($Home)\Projects"
-    )
-=======
-    "Projects"     = @(
-    	"$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob",
-    	"$($Home)\Projects"
-	)
->>>>>>> 9bf967bb93bc847891fee02f89663e52a5a6b4c8
+        "$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob"
+        )
 }
 
 foreach ($MyVariable in $MyVariables.Keys) {

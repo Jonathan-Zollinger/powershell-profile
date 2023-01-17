@@ -1,6 +1,6 @@
 #Requires -RunAsAdministrator
 
-@('neovim', 'Arm.GnuArmEmbeddedToolchain') | Foreach-Object {
+@('neovim', 'Arm.GnuArmEmbeddedToolchain', 'Kitware.CMake') | Foreach-Object {
     if ((winget list $_).Length -eq 3){
         winget install $_
     }else {

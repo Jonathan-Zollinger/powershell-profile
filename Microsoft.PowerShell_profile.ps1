@@ -1,21 +1,19 @@
-
+$ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 #  --------------- Alias...i? ---------------
 
-Set-Variable -Name MyVariables -Scope Script -Value @{
-    "dc"       = docker-compose
-    "inkscape" = "C:\Program Files\Inkscape\bin\inkscape.exe"
-}
-Set-Alias -Name "dc" -Value docker-compose
-Set-Alias -Name "Reboot" -Value Restart-Computer
+Set-Alias unzip Expand-Archive
+Set-Alias dc docker-compose
+Set-Alias Reboot Restart-Computer
 #  ---------------- variables ----------------
-
-$ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 
 # Setting variables using set-variables (like below) removes IDE warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
     "mygit"	     = "git@github.com:Jonathan-Zollinger/"
+    "inkscape"       = "C:\Program Files\Inkscape\bin\inkscape.exe"
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
+    "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
+    "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
     "Projects"       = @(
         "$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob"
         )

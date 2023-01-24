@@ -12,7 +12,7 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "inkscape"       = "C:\Program Files\Inkscape\bin\inkscape.exe"
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
-    "github"         = "$($env:GOHOME)\src\github.com\Jonathan-Zollinger\"
+    "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
     "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
 }

@@ -8,7 +8,7 @@
     }
 }
 
-$nvimConfig = 'C:\Users\jonat\.config\nvim\' 
+$nvimConfig = '~\AppData\Local\nvim'
 
 if( -not ( Test-Path -PathType Container -Path $nvimConfig ) ){
     Write-Verbose "Creating $($nvimConfig)..."

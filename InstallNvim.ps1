@@ -1,5 +1,4 @@
 #Requires -RunAsAdministrator
-
 @('neovim', 'Arm.GnuArmEmbeddedToolchain', 'Kitware.CMake') | Foreach-Object {
     if ((winget list $_).Length -eq 3){
         winget install $_
@@ -9,6 +8,7 @@
 }
 
 $nvimConfig = 'C:\Users\jonat\.config\nvim\' 
+# C:\Users\Jonathan\Appdata\Local\nvim\init.lua
 
 if( -not ( Test-Path -PathType Container -Path $nvimConfig ) ){
     Write-Verbose "Creating $($nvimConfig)..."
@@ -16,4 +16,8 @@ if( -not ( Test-Path -PathType Container -Path $nvimConfig ) ){
 }else {
     Write-Verbose "nvim's config dir is already present "
 }
+
+$nvimConfigScript = 'https://raw.githubusercontent.com/Jonathan-Zollinger/dotfiles/main/nvim/windows-init.lua'
+
+Invoke-WebRequest -URI $nvimConfigScript -OutFile "$($nvimConfig)init.lua"
 

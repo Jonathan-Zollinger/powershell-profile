@@ -7,8 +7,12 @@
     }
 }
 
+<<<<<<< HEAD
 $nvimConfig = 'C:\Users\jonat\.config\nvim\' 
 # C:\Users\Jonathan\Appdata\Local\nvim\init.lua
+=======
+$nvimConfig = '~\AppData\Local\nvim'
+>>>>>>> df4c6b7c7d3f32febe3451b4b29ed79a76a224ba
 
 if( -not ( Test-Path -PathType Container -Path $nvimConfig ) ){
     Write-Verbose "Creating $($nvimConfig)..."

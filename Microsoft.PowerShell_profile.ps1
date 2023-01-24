@@ -12,13 +12,10 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "inkscape"       = "C:\Program Files\Inkscape\bin\inkscape.exe"
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
+    "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
     "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
-    "Projects"       = @(
-        "$($env:GOHOME)\src\github.com\Jonathan-Zollinger\Go-getajob"
-        )
 }
-
 foreach ($MyVariable in $MyVariables.Keys) {
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
 }

@@ -37,12 +37,12 @@ truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"
 # similar to mapped_locations in Oh My Posh
 [directory.substitutions]
 style = "bg:Blue fg:White"
-"Documents" = " "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = "ಠ⌣ಠ "
-"git.trivir.com" = "𝝙 "
-"github.houston.softwaregrp.net" = "⩄ "
+"Documents" = ""
+"Downloads" = ""
+"Music" = ""
+"Pictures" = "ಠ⌣ಠ"
+"git.trivir.com" = "𝝙"
+"github.houston.softwaregrp.net" = "⩄"
 
 # Keep in mind that the order matters. For example:
 # "Important Documents" = "  "
@@ -53,8 +53,8 @@ style = "bg:Blue fg:White"
 
 [docker_context]
 style = "bg:Blue fg:White"
-symbol = " "
-format = "[ $symbol ]($style)"
+symbol = ""
+format = "[$symbol]($style)"
 
 [git_branch]
 style = "fg:green"

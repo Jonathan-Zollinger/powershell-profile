@@ -1,8 +1,9 @@
 format = """
-$username\
+
 $directory\
 $git_branch\
 $docker_context
+
 [ ](fg:Green)\
 """
 
@@ -25,13 +26,9 @@ format = """\
 [directory]
 style = "bg:Blue fg:White"
 format = """\
-[](fg:cyan)\
-[ ](bg:cyan)\
-[](fg:cyan bg:blue)\
-[$path]($style)\
-[](fg:cyan bg:blue)\
-[ ](bg:cyan)\
-[](fg:cyan)\
+[](fg:blue)\
+[$path ]($style)\
+[](fg:blue)\
 """
 truncation_length = 3 
 truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"
@@ -60,11 +57,8 @@ symbol = " "
 format = "[ $symbol ]($style)"
 
 [git_branch]
-style = "bg:Green fg:white"
+style = "fg:green"
 symbol = ""
-format = """
-[ ](fg:Green)\
-[ on $symbol $branch ](fg:white bg:Green)\
-[ ](fg:Green)\
+format = """[ on '$branch' $symbol ]($style)\
 """
 

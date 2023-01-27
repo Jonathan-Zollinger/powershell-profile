@@ -1,8 +1,9 @@
 format = """
-$username\
+
 $directory\
 $git_branch\
 $docker_context
+
 [ ](fg:Green)\
 """
 
@@ -25,25 +26,23 @@ format = """\
 [directory]
 style = "bg:Blue fg:White"
 format = """\
-[](fg:cyan)\
-[ ](bg:cyan)\
-[](fg:cyan bg:blue)\
-[$path]($style)\
-[](fg:cyan bg:blue)\
-[ ](bg:cyan)\
-[](fg:cyan)\
+[](fg:blue)\
+[$path ]($style)\
+[](fg:blue)\
 """
-truncation_length = 3
+truncation_length = 3 
 truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"
 
 # Here is how you can shorten some long paths by text replacement
 # similar to mapped_locations in Oh My Posh
 [directory.substitutions]
 style = "bg:Blue fg:White"
-"Documents" = " "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = "ಠ⌣ಠ "
+"Documents" = ""
+"Downloads" = ""
+"Music" = ""
+"Pictures" = "ಠ⌣ಠ"
+"git.trivir.com" = "𝝙"
+"github.houston.softwaregrp.net" = "⩄"
 
 # Keep in mind that the order matters. For example:
 # "Important Documents" = "  "
@@ -54,16 +53,12 @@ style = "bg:Blue fg:White"
 
 [docker_context]
 style = "bg:Blue fg:White"
-symbol = " "
-format = "[ $symbol ]($style)"
+symbol = ""
+format = "[$symbol]($style)"
 
 [git_branch]
-style = "bg:Green fg:white"
+style = "fg:green"
 symbol = ""
-format = """
-[
-        ](fg:Green)\
-[ on $symbol $branch ](fg:white bg:Green)\
-[ ](fg:Green)\
+format = """[ on '$branch' $symbol ]($style)\
 """
 

@@ -33,16 +33,6 @@ format = """\
 truncation_length = 3 
 truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"
 
-# Here is how you can shorten some long paths by text replacement
-# similar to mapped_locations in Oh My Posh
-[directory.substitutions]
-style = "bg:Blue fg:White"
-"Documents" = ""
-"Downloads" = ""
-"Music" = ""
-"Pictures" = "ಠ⌣ಠ"
-"git.trivir.com" = "𝝙"
-"github.houston.softwaregrp.net" = "⩄"
 
 # Keep in mind that the order matters. For example:
 # "Important Documents" = "  "

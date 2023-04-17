@@ -1,6 +1,8 @@
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 #  --------------- Alias...i? ---------------
 
+Set-Alias vi nvim
+Set-Alias vim nvim
 Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
@@ -15,6 +17,7 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
     "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
+    "trivir"         = "$($env:GoPath)\src\git.trivir.com\"
 }
 foreach ($MyVariable in $MyVariables.Keys) {
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]

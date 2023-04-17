@@ -24,7 +24,7 @@ format = """\
 """
 
 [directory]
-style = "bg:Blue fg:White"
+style = "bg:Blue fg:Black"
 format = """\
 [](fg:blue)\
 [$path ]($style)\

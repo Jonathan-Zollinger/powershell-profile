@@ -31,12 +31,16 @@ Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVar
 $env:EDITOR='nvim'
 
 #Edit PATH
-$env:Path = "$($env:Path);C:\Program Files\Goss\"
+@("C:\Program Files\Goss\", "C:\Program Files\timer") | ForEach-Object {
+    if (! ($env:Path -contains $_)) {
+        $env:Path = "$($env:Path);$_"
+    }
+}
+
 
 
 #  ---------------- functions ----------------
 
-. ./find.ps1
 
 function Sync-Branches {
     <#

@@ -1,6 +1,8 @@
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 #  --------------- Alias...i? ---------------
-
+Set-Alias grep Select-String
+Set-Alias vi nvim
+Set-Alias vim nvim
 Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
@@ -18,6 +20,8 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
     "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
+    "trivir"         = "$($env:GoPath)\src\git.trivir.com\"
+    "WTSettings"     = "$($Home)\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 }
 foreach ($MyVariable in $MyVariables.Keys) {
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
@@ -31,6 +35,8 @@ $env:Path = "$($env:Path);C:\Program Files\Goss\"
 
 
 #  ---------------- functions ----------------
+
+. ./find.ps1
 
 function Sync-Branches {
     <#
@@ -142,35 +148,6 @@ function Update-MyModule {
     }
     # $Module = Split-Path $PsmFile -LeafBase    
     #TODO(Jonathan Z) copy files over existing files in /Powershell/Modules/<module>/directory 
-}
-
-Function Find {
-    <#
-    .SYNOPSIS
-    Recursively searches a directory for a string in directory names and file names. The search can be performed through file content instead using the -Content flag.
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "Directory")]
-        [ValidateScript({ Test-Path -Path $_ -PathType Container })]
-        [string] $Directory,
-        [Parameter(Mandatory = $false, Position = 1, ParameterSetName = "File")]
-        [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-        [string] $File,
-        [Parameter(Mandatory = $false, Position = 2, ParameterSetName = "Name")]
-        [switch] $Name,
-        [Parameter(Mandatory = $false, Position = 2, ParameterSetName = "Content")]
-        [switch] $Content,
-        [string] $FindMe
-
-    )
-    if ($Content.IsPresent) { 
-        if ($File.IsPresent) {
-            return Select-String -Path $File $FindMe
-        }
-        return Get-ChildItem $Directory -Recurse | Select-String $FindMe
-    }
-    return Get-ChildItem $Directory -Recurse $FindMe    #Default behavior is to search file and directory names
 }
 
 function Set-DebugPreference {

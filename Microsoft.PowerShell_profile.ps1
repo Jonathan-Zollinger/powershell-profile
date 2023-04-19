@@ -28,7 +28,7 @@ Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVar
 
 #  ---------------- functions ----------------
 
-. ./find.ps1
+import-module .\find.ps1
 
 function Sync-Branches {
     <#

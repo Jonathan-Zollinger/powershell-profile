@@ -6,11 +6,14 @@ Set-Alias vim nvim
 Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
+Set-Alias make "C:\Program Files (x86)\GnuWin32\bin\make.exe" # winget install 'GnuWin32: Make'
+Set-Alias vi 'nvim'
+Set-Alias vim 'nvim'
 #  ---------------- variables ----------------
 
 # Setting variables using set-variables (like below) removes IDE warnings for unused variables.
 Set-Variable -Name MyVariables -Scope Script -Value @{
-    "mygit"	     = "git@github.com:Jonathan-Zollinger/"
+    "StartupDir"     = "%AppData%\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
     "inkscape"       = "C:\Program Files\Inkscape\bin\inkscape.exe"
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
@@ -24,6 +27,16 @@ foreach ($MyVariable in $MyVariables.Keys) {
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
 }
 Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVariable" and "$MyVariables"
+
+$env:EDITOR='nvim'
+
+#Edit PATH
+@("C:\Program Files\Goss\", "C:\Program Files\timer") | ForEach-Object {
+    if (! ($env:Path -contains $_)) {
+        $env:Path = "$($env:Path);$_"
+    }
+}
+
 
 
 #  ---------------- functions ----------------
@@ -160,7 +173,7 @@ function Set-DebugPreference {
 }
 
 function Get-FullHistory {
-    code (Get-PSReadlineOption).HistorySavePath
+    Get-Content (get-PSReadlineOption).HistorySavePath
 }
 
 #TODO(Jonathan) add this to peanutbutter before removing from profile

@@ -41,7 +41,8 @@ $env:EDITOR='nvim'
 
 #  ---------------- functions ----------------
 
-import-module .\find.ps1
+Import-Module "${PowershellHome}\Find-Object.ps1"
+Import-Module "${PowershellHome}\Start-Pomodoro.ps1"
 
 function Sync-Branches {
     <#

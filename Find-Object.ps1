@@ -1,4 +1,4 @@
-Function Find {
+Function find-object {
     <#
     .SYNOPSIS
     Returns matching file and directory names or file content. 

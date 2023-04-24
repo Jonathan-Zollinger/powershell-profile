@@ -37,6 +37,8 @@ $env:EDITOR='nvim'
     }
 }
 
+Import-Module "$PowershellHome/Start-Pomodoro.ps1"
+
 
 
 #  ---------------- functions ----------------

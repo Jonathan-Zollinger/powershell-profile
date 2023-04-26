@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 #  --------------- Alias...i? ---------------
+Set-Alias wget Start-BitsTransfer
 Set-Alias grep Select-String
 Set-Alias vi nvim
 Set-Alias vim nvim
@@ -31,8 +32,8 @@ Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVar
 $env:EDITOR='nvim'
 
 #Edit PATH
-@("C:\Program Files\Goss\", "C:\Program Files\timer") | ForEach-Object {
-    if (! ($env:Path -contains $_)) {
+@("C:\Program Files\Goss", "C:\Program Files\timer") | ForEach-Object {
+    if (! ($env:Path -like "*$_*")) {
         $env:Path = "$($env:Path);$_"
     }
 }

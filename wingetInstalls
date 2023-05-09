@@ -1,0 +1,24 @@
+winget install neovim
+winget install glazewm
+winget install cmake
+winget install nodejs
+winget install inkscape
+winget install inkscape.inkscape
+winget install Microsoft.PowerShell
+winget install vscode
+winget install Nvidia.GeForceExperience
+winget install windirstat
+winget install Docker.DockerDesktop
+winget install GoLang.Go
+winget install SumatraPDF.SumatraPDF
+winget install ShareX.ShareX
+winget install VideoLAN.VLC
+winget install YTmdesktop.Ytmdesktop
+winget install OBSProject.OBSStudio
+winget install 'Gospel Library'
+winget install JanDeDobbeleer.OhMyPosh
+winget install Starship.Starship
+Arm.GnuArmEmbeddedToolchain
+
+go install github.com/jreisinger/ghrel@latest
+

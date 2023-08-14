@@ -1,15 +1,12 @@
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 #  --------------- Alias...i? ---------------
-Set-Alias wget Start-BitsTransfer
 Set-Alias grep Select-String
-Set-Alias vi nvim
-Set-Alias vim nvim
+Set-Alias vi hx
+Set-Alias vim hx
 Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
 Set-Alias make "C:\Program Files (x86)\GnuWin32\bin\make.exe" # winget install 'GnuWin32: Make'
-Set-Alias vi 'nvim'
-Set-Alias vim 'nvim'
 #  ---------------- variables ----------------
 
 # Setting variables using set-variables (like below) removes IDE warnings for unused variables.
@@ -19,20 +16,21 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
     "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
-    "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
+    "hxConfig"       = "$($env:AppData)\helix\config.toml"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
     "trivir"         = "$($env:GoPath)\src\git.trivir.com\"
     "WTSettings"     = "$($Home)\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+    "keyPirinhaConf" = "$($env:AppData)\Keypirinha\User\Keypirinha.ini"
 }
 foreach ($MyVariable in $MyVariables.Keys) {
     Set-Variable -Scope Global -Name $MyVariable -Value $MyVariables[$MyVariable]
 }
 Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVariable" and "$MyVariables"
 
-$env:EDITOR='nvim'
+$env:EDITOR='hx'
 
 #Edit PATH
-@("C:\Program Files\Goss", "C:\Program Files\timer") | ForEach-Object {
+@("C:\Program Files\MongoDB\Server\6.0\bin","C:\Program Files\Goss", "C:\Program Files\timer") | ForEach-Object {
     if (! ($env:Path -like "*$_*")) {
         $env:Path = "$($env:Path);$_"
     }
@@ -43,7 +41,7 @@ $env:EDITOR='nvim'
 #  ---------------- functions ----------------
 
 #Import-Module "${PowershellHome}\Find-Object.ps1"
-Import-Module "${PowershellHome}\Start-Pomodoro.ps1"
+#Import-Module "${PowershellHome}\Start-Pomodoro.ps1"
 
 function Sync-Branches {
     <#

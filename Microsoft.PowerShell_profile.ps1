@@ -146,5 +146,5 @@ function Write-Header {
 }
 
 
-$ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
+$ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/conf/starship.toml"
 Invoke-Expression (&starship init powershell)

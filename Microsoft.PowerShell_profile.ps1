@@ -1,14 +1,12 @@
 $ErrorActionPreference = 'Stop' # default to powershell scripts stopping at failures
 #  --------------- Alias...i? ---------------
 Set-Alias grep Select-String
-Set-Alias vi nvim
-Set-Alias vim nvim
 Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
 Set-Alias make "C:\Program Files (x86)\GnuWin32\bin\make.exe" # winget install 'GnuWin32: Make'
-Set-Alias vi 'nvim'
-Set-Alias vim 'nvim'
+Set-Alias vi 'hx'
+Set-Alias vim 'hx'
 #  ---------------- variables ----------------
 
 # Setting variables using set-variables (like below) removes IDE warnings for unused variables.
@@ -28,14 +26,21 @@ foreach ($MyVariable in $MyVariables.Keys) {
 }
 Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVariable" and "$MyVariables"
 
-$env:EDITOR='nvim'
+$env:EDITOR='hx'
 
 #Edit PATH
-@("C:\Program Files\Goss\", "C:\Program Files\timer", "C:\Program Files (x86)\VMware\VMware Workstation") | ForEach-Object {
+@("C:\Program Files\Goss\", 
+    "C:\Program Files\timer", 
+    "C:\Program Files (x86)\VMware\VMware Workstation", 
+    "C:\Program Files\idmunit-test-converter\bin",
+    "C:\Program Files\TestSync\bin") | ForEach-Object {
     if (! ($env:Path -contains $_)) {
         $env:Path = "$($env:Path);$_"
     }
 }
+
+
+
 #  ---------------- functions ----------------
 function Set-DebugPreference {
     [CmdletBinding()]
@@ -139,6 +144,7 @@ function Write-Header {
     }
     Write-Output "$('#' * ($Header_Width))"
 }
+
 
 $ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
 Invoke-Expression (&starship init powershell)

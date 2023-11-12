@@ -18,7 +18,6 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
     "hxConfig"       = "$($env:AppData)\helix\config.toml"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
-    "trivir"         = "$($env:GoPath)\src\git.trivir.com\"
     "WTSettings"     = "$($Home)\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
     "keyPirinhaConf" = "$($env:AppData)\Keypirinha\User\Keypirinha.ini"
 }
@@ -27,14 +26,42 @@ foreach ($MyVariable in $MyVariables.Keys) {
 }
 Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVariable" and "$MyVariables"
 
-$env:EDITOR='hx'
+$env:EDITOR = 'hx'
+
+function Add-ToPath {
+    <#
+    .SYNOPSIS
+    Adds a set of paths to the PATH environment variable.
+
+    .DESCRIPTION 
+    Checks if a path is on the PATH variable. if it's not, it's added to the end of PATH.
+
+    .PARAMETER Paths
+    Array of paths to add to PATH. 
+
+    .EXAMPLE
+    Add-ToPath(@("C:\Program Files\dgraph", "C:\Program Files\MongoDB\Server\6.0\bin", "C:\Program Files\Goss", "C:\Program Files\timer"))
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [String[]]
+        $Paths
+    )
+    $Paths | ForEach-Object {
+        if (! ($env:Path -like "*$_*")) {
+            $env:Path = "$($env:Path);$_"
+        }
+    }
+} 
 
 #Edit PATH
-@("C:\Program Files\MongoDB\Server\6.0\bin","C:\Program Files\Goss", "C:\Program Files\timer") | ForEach-Object {
-    if (! ($env:Path -like "*$_*")) {
-        $env:Path = "$($env:Path);$_"
-    }
-}
+Add-ToPath(@(
+    "C:\Program Files\dgraph",
+    "C:\Program Files\MongoDB\Server\6.0\bin", 
+    "C:\Program Files\Goss", 
+    "C:\Program Files\timer"
+    ))
 
 
 
@@ -42,6 +69,16 @@ $env:EDITOR='hx'
 
 #Import-Module "${PowershellHome}\Find-Object.ps1"
 #Import-Module "${PowershellHome}\Start-Pomodoro.ps1"
+
+function Start-DevTerminal {
+    @("JAVA_HOME", "GRAALVM_HOME") | ForEach-Object { 
+        [System.Environment]::SetEnvironmentVariable($_, "C:\Users\jonat\.jdks\graalvm-ce-17")
+    }
+    Add-ToPath $env:JAVA_HOME
+    Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+    Enter-VsDevShell b48ab155 -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
+}
+
 
 function Sync-Branches {
     <#
@@ -483,7 +520,7 @@ function Maven {
 # See https://ch0.co/tab-completion for details.
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
-  Import-Module "$ChocolateyProfile"
+    Import-Module "$ChocolateyProfile"
 }
 $ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
 Invoke-Expression (&starship init powershell)

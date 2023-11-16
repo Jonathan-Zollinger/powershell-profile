@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 if (!(Test-Path -Path "$(Split-Path $PROFILE -Parent)\bin.ps1" -PathType Leaf)){
     Write-Error "Can't find '$(Split-Path $PROFILE -Parent)\bin.ps1'."
 }
-Import-Module .\bin.ps1
+Import-Module "$(Split-Path $PROFILE -Parent)\bin.ps1"
 #  --------------- Alias...i? ---------------
 Set-Alias grep Select-String
 Set-Alias vi hx
@@ -40,5 +40,5 @@ Add-ToPath(@(
     "C:\Program Files\timer"
     "C:\Program Files\micronaut-cli-4.1.6\bin"
     ))
-
+$ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
 Invoke-Expression (&starship init powershell)

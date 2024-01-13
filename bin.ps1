@@ -29,9 +29,10 @@ function Start-DevTerminal {
   @("JAVA_HOME", "GRAALVM_HOME") | ForEach-Object { 
       [System.Environment]::SetEnvironmentVariable($_, "C:\Users\jonat\.jdks\graalvm-ce-17")
   }
+  $devShellGeneratedName = "a33f35bb"
   Add-ToPath $env:JAVA_HOME
   Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-  Enter-VsDevShell b48ab155 -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
+  Enter-VsDevShell $devShellGeneratedName -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
 }
 
 

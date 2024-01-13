@@ -39,6 +39,19 @@ Add-ToPath(@(
     "C:\Program Files\Goss", 
     "C:\Program Files\timer"
     "C:\Program Files\micronaut-cli-4.1.6\bin"
+    "$($Home)\Documents\ShareX\Tools\"
+    "C:\Program Files\microfetch"
+    "C:\Program Files\ttyd"
     ))
 $ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
 Invoke-Expression (&starship init powershell)
+
+# Import the Chocolatey Profile that contains the necessary code to enable
+# tab-completions to function for `choco`.
+# Be aware that if you are missing these lines from your profile, tab completion
+# for `choco` will not function.
+# See https://ch0.co/tab-completion for details.
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+  Import-Module "$ChocolateyProfile"
+}

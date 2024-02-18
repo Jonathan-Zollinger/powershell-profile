@@ -1,12 +1,12 @@
 $ErrorActionPreference = 'Stop'
-if (!(Test-Path -Path "$(Split-Path $PROFILE -Parent)\bin.ps1" -PathType Leaf)){
+if (!(Test-Path -Path "$(Split-Path $PROFILE -Parent)\bin.ps1" -PathType Leaf)) {
     Write-Error "Can't find '$(Split-Path $PROFILE -Parent)\bin.ps1'."
 }
 Import-Module "$(Split-Path $PROFILE -Parent)\bin.ps1"
 #  --------------- Alias...i? ---------------
 Set-Alias grep Select-String
-Set-Alias vi hx
-Set-Alias vim hx
+Set-Alias vi nvim
+Set-Alias vim nvim
 Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
@@ -20,6 +20,7 @@ Set-Variable -Name MyVariables -Scope Script -Value @{
     "HostsFile"      = "C:\Windows\System32\drivers\etc\hosts"
     "PowershellHome" = "$($Home)\Documents\Powershell"
     "github"         = "$($env:GoPath)\src\github.com\Jonathan-Zollinger\"
+    "NvimConfig"     = "$($Home)\Appdata\Local\nvim\init.lua"
     "hxConfig"       = "$($env:AppData)\helix\config.toml"
     "GlazeWmConfig"  = "$($Home)\.glaze-wm\config.yaml"
     "WTSettings"     = "$($Home)\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
@@ -30,18 +31,18 @@ foreach ($MyVariable in $MyVariables.Keys) {
 }
 Remove-Variable -Name MyVariable, MyVariables # removes the literal vars "$MyVariable" and "$MyVariables"
 
-$env:EDITOR = 'hx'
+$env:EDITOR = 'nvim'
 
 #Edit PATH
 Add-ToPath(@(
-    "C:\Program Files\dgraph",
-    "C:\Program Files\MongoDB\Server\6.0\bin", 
-    "C:\Program Files\Goss", 
-    "C:\Program Files\timer"
-    "C:\Program Files\micronaut-cli-4.1.6\bin"
-    "$($Home)\Documents\ShareX\Tools\"
-    "C:\Program Files\microfetch"
-    "C:\Program Files\ttyd"
+        "C:\Program Files\dgraph",
+        "C:\Program Files\MongoDB\Server\6.0\bin", 
+        "C:\Program Files\Goss", 
+        "C:\Program Files\timer"
+        "C:\Program Files\micronaut-cli-4.1.6\bin"
+        "$($Home)\Documents\ShareX\Tools\"
+        "C:\Program Files\microfetch"
+        "C:\Program Files\ttyd"
     ))
 $ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
 Invoke-Expression (&starship init powershell)
@@ -53,5 +54,5 @@ Invoke-Expression (&starship init powershell)
 # See https://ch0.co/tab-completion for details.
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
-  Import-Module "$ChocolateyProfile"
+    Import-Module "$ChocolateyProfile"
 }

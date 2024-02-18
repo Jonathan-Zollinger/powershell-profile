@@ -25,6 +25,29 @@ function Add-ToPath {
   }
 } 
 
+
+function Source {
+    <#
+    .SYNOPSIS
+    Reads a properties file into the current shell's environment variables.
+
+    .PARAMETER Path
+    filepath for the properties file
+
+    .EXAMPLE
+    # reading in sensitive data for a java compilation
+    source .env; mvn deploy
+
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [String]
+        $Path
+    )
+    cat $Path | % { if (!$_.Trim().StartsWith("#")) { [System.Environment]::SetEnvironmentVariable($_.Split("=")[0], $_.Split("=")[1]) } }
+}
+
 function Start-DevTerminal {
   @("JAVA_HOME", "GRAALVM_HOME") | ForEach-Object { 
       [System.Environment]::SetEnvironmentVariable($_, "C:\Users\jonat\.jdks\graalvm-ce-17")

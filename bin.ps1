@@ -15,7 +15,7 @@ function Add-ToPath {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [ValidateScript()]
+        [ValidateScript({$_ | ForEach-Object {Test-Path -Path $_ -PathType Container}})]
         [String[]]
         $Paths
     )
@@ -43,10 +43,17 @@ function Source {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
+        [ValidateScript({ Test-Path -Path $_ -PathType Leaf})]
         [String]
         $Path
     )
-    cat $Path | % { if (!$_.Trim().StartsWith("#")) { [System.Environment]::SetEnvironmentVariable($_.Split("=")[0], $_.Split("=")[1]) } }
+    Get-Content $Path | ForEach-Object { 
+        if (!$_.Trim().StartsWith("#")) {
+             [System.Environment]::SetEnvironmentVariable(
+                $_.Split("=")[0], 
+                $_.Split("=")[1]) 
+            } 
+    }
 }
 
 function Start-DevTerminal {

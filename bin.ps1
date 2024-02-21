@@ -15,6 +15,7 @@ function Add-ToPath {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
+        [ValidateScript()]
         [String[]]
         $Paths
     )
@@ -49,8 +50,38 @@ function Source {
 }
 
 function Start-DevTerminal {
+    <#
+    .SYNOPSIS
+    Configures shell to use a fully fledged java dev environment
+
+    .DESCRIPTION
+    Adds JAVA_HOME, GRAALVM_HOME and MAVEN_HOME variables and verifies they're each on system's PATH. 
+    Imports VScode dev shell module and calls Enter-VsDevShell
+
+    .PARAMETER Java
+    Path to graalvm directory, defaults to ~\.jdks\graalvm-ce-17
+
+    .PARAMETER Maven
+    Path to maven directory, defaults to 'C:\Program Files\Apache Maven\'
+
+    .EXAMPLE
+    # Valid use could be as simple as calling with no args
+    Start-DevTerminal
+
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [String]
+        [ValidateScript({ Test-Path -Path $_ -PathType Container })]
+        $Java = "$($HOME)\.jdks\graalvm-ce-17",
+        [Parameter()]
+        [String]
+        [ValidateScript({ Test-Path -Path $_ -PathType Container })]
+        $Maven = "C:\Program Files\Apache Maven\"
+    )
     @("JAVA_HOME", "GRAALVM_HOME") | ForEach-Object { 
-        [System.Environment]::SetEnvironmentVariable($_, "C:\Users\jonat\.jdks\graalvm-ce-17")
+        [System.Environment]::SetEnvironmentVariable($_, $Java)
     }
     [System.Environment]::SetEnvironmentVariable("MAVEN_HOME", "C:\Program Files\Apache Maven\")
     $devShellGeneratedName = "a33f35bb"
@@ -58,15 +89,7 @@ function Start-DevTerminal {
     Add-ToPath "$env:MAVEN_HOME\bin"
 
     Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-    Enter-VsDevShell $devShellGeneratedName -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
-}
-
-
-function Update-Powershell {
-    #TODO(Jonathan) Document this tool
-    Invoke-RestMethod https://aka.ms/install-powershell.ps1 | Out-File Update_Powershell.ps1
-    .\Update_Powershell.ps1
-    Remove-Item .\Update_Powershell.ps1 -ErrorAction Ignore
+    Enter-VsDevShell  $devShellGeneratedName -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
 }
 
 function Write-Comment() {
@@ -143,23 +166,6 @@ function Write-Header {
     Write-Output "$('#' * ($Header_Width))"
 }
 
-
-function Set-DebugPreference {
-    [CmdletBinding()]
-    param (
-        [Parameter(ParameterSetName = "On", Mandatory = $false)]
-        [switch] $On,
-        [Parameter(ParameterSetName = "Off", Mandatory = $false)]
-        [switch] $Off
-    )
-    $DebugValue = $null
-    switch ($PSCmdlet.ParameterSetName) {
-        Off { $DebugValue = "SilentlyContinue"; break }
-        On { $DebugValue = "Continue"; break }
-        Default { Throw "Provide either the -On or -Off flag for Set-Debug" }
-    }
-    Set-Variable -Scope Global -Name DebugPreference -Value $DebugValue
-}
 
 function Get-FullHistory {
     Get-Content (get-PSReadlineOption).HistorySavePath

@@ -35,14 +35,9 @@ $env:EDITOR = 'nvim'
 
 #Edit PATH
 Add-ToPath(@(
-        "C:\Program Files\dgraph",
-        "C:\Program Files\MongoDB\Server\6.0\bin", 
-        "C:\Program Files\Goss", 
-        "C:\Program Files\timer"
-        "C:\Program Files\micronaut-cli-4.1.6\bin"
+        "C:\Program Files\MongoDB\Server\6.0\bin" 
         "$($Home)\Documents\ShareX\Tools\"
         "C:\Program Files\microfetch"
-        "C:\Program Files\ttyd"
     ))
 $ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
 Invoke-Expression (&starship init powershell)

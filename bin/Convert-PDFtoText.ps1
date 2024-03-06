@@ -1,5 +1,5 @@
 # original author -> https://allthesystems.com/2020/10/read-text-from-a-pdf-with-powershell/
-function convert-PDFtoText {
+function Convert-PDFtoText {
   #requires -runasadministrator
 	param(
 		[Parameter(Mandatory=$true)][string]$file

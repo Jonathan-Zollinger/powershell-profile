@@ -1,8 +1,4 @@
-$ErrorActionPreference = 'Stop'
-if (!(Test-Path -Path "$(Split-Path $PROFILE -Parent)\bin.ps1" -PathType Leaf)) {
-    Write-Error "Can't find '$(Split-Path $PROFILE -Parent)\bin.ps1'."
-}
-ls "$(Split-Path $PROFILE -Parent)\src" -File | % {
+ls "$(Split-Path $PROFILE -Parent)\bin" -File | % {
     Import-Module $_
 }
 
@@ -10,7 +6,6 @@ function Get-FullHistory {
     Get-Content (get-PSReadlineOption).HistorySavePath
 }
 
-Import-Module "$(Split-Path $PROFILE -Parent)\bin.ps1"
 #  --------------- Alias...i? ---------------
 Set-Alias grep Select-String
 Set-Alias vi nvim

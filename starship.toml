@@ -1,6 +1,4 @@
-format = """
-
-$directory\
+format = """$directory\
 $git_branch\
 $docker_context
 

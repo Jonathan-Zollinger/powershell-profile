@@ -8,6 +8,9 @@ function Convert-MarkdownImageToFootNoteMarkdown {
     .PARAMETER MarkdownText
     Markdown formatted image link with a link to follow other than the image.
 
+    .PARAMETER ToClipboard
+    Put this output to the clipboard as well.
+
     .EXAMPLE
     # converting Sonarcloud's generated build badge
     $> Convert-MarkdownImageToFootNoteMarkdown "[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Graqr_Threshr&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Graqr_Threshr)"
@@ -21,12 +24,22 @@ function Convert-MarkdownImageToFootNoteMarkdown {
         [Parameter(Mandatory = $true)]
         [ValidateScript({$_ -match '^\[!\[.+]\(.+\)\]\(.+\)'})]
         [String]
-        $MarkdownText
+        $MarkdownText,
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $ToClipboard
     )
     $title = ($MarkdownText | Select-String -Pattern '\[[^!)]+\]').Matches.Value
     $title = $title.Substring(1, ($title.Length-2))
     $links = ($MarkdownText | Select-String -AllMatches '\([^)]+\)').Matches
-    "[$title][$($title) link]"
-    "[$($title)]:$($links.Get(0))"
-    "[$($title) link]:$($links.Get(1))"
+
+    $return = @"
+    [![$title]][$($title) link]
+    [$($title)]:$($links.Get(0))
+    [$($title) link]:$($links.Get(1))
+"@
+    if ($ToClipboard.IsPresent) {
+        $return | Set-Clipboard
+    }
+    $return
 }

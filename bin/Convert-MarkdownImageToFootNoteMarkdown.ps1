@@ -35,8 +35,8 @@ function Convert-MarkdownImageToFootNoteMarkdown {
 
     $return = @"
     [![$title]][$($title) link]
-    [$($title)]:$($links.Get(0))
-    [$($title) link]:$($links.Get(1))
+    [$($title)]:$($links.Get(0).Value.Substring(1, ($links.Get(0).Length - 2)))
+    [$($title) link]:$($links.Get(1).Value.Substring(1, ($links.Get(1).Length - 2)))
 "@
     if ($ToClipboard.IsPresent) {
         $return | Set-Clipboard

@@ -1,4 +1,4 @@
-ls "$(Split-Path $PROFILE -Parent)\bin" -File | % {
+ls "$(Split-Path $PROFILE -Parent)\bin" -File -Filter "*.ps1" | % {
     Import-Module $_
 }
 
@@ -14,6 +14,8 @@ Set-Alias unzip Expand-Archive
 Set-Alias dc docker-compose
 Set-Alias Reboot Restart-Computer
 Set-Alias make "C:\Program Files (x86)\GnuWin32\bin\make.exe" # winget install 'GnuWin32: Make'
+Set-Alias -name psql -Value "C:\Program Files\PostgreSQL\13\bin\psql.exe"
+Set-Alias -name pg_restore -Value "C:\Program Files\PostgreSQL\13\bin\pg_restore.exe"
 #  ---------------- variables ----------------
 
 # Setting variables using set-variables (like below) removes IDE warnings for unused variables.
@@ -38,7 +40,6 @@ $env:EDITOR = 'nvim'
 
 #Edit PATH
 Add-ToPath(@(
-        "C:\Program Files\MongoDB\Server\6.0\bin" 
         "$($Home)\Documents\ShareX\Tools\"
         "C:\Program Files\microfetch"
     ))

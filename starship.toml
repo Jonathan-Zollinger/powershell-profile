@@ -2,7 +2,7 @@ format = """$directory\
 $git_branch\
 $docker_context
 
-[ ](fg:Green)\
+[  ](fg:Green)\
 """
 
 # symbols: https://www.nerdfonts.com/cheat-sheet
@@ -26,7 +26,7 @@ style = "bg:Blue fg:Black"
 format = """\
 [](fg:blue)\
 [$path ]($style)\
-[](fg:blue)\
+[  ](fg:blue)\
 """
 truncation_length = 3 
 truncation_symbol = "♪~ ᕕ(ᐛ)ᕗ/"

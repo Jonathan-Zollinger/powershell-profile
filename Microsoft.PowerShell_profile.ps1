@@ -43,7 +43,7 @@ Add-ToPath(@(
         "$($Home)\Documents\ShareX\Tools\"
         "C:\Program Files\microfetch"
     ))
-$ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/starship.toml"
+$ENV:STARSHIP_CONFIG = "$(Split-Path $PROFILE -Parent)/.config/starship.toml"
 Invoke-Expression (&starship init powershell)
 
 # Import the Chocolatey Profile that contains the necessary code to enable

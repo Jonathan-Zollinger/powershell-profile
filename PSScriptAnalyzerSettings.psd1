@@ -3,7 +3,7 @@
 @{
     'Rules' = @{
         'PSAvoidUsingCmdletAliases' = @{
-            'allowlist' = @('cd', '%', 'ls')
+            'allowlist' = @('cd', '%', 'ls', 'echo')
         }
     }
 }
